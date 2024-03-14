@@ -209,6 +209,13 @@ class ApprovePurchaseOrderController extends Controller
                     ->update([
                         'is_active' => 'Y'
                     ]);
+                }else{
+                    DB::table('t_po02')
+                    ->where('ponum', $ptaNumber)
+                    ->whereIn('poitem', $poItems)
+                    ->update([
+                        'approvestat'   => 'A'
+                    ]);
                 }
 
                 $checkIsFullApprove = DB::table('t_po_approval')
@@ -362,10 +369,19 @@ class ApprovePurchaseOrderController extends Controller
                     ->update([
                         'is_active' => 'Y'
                     ]);
+                    // dd($nextApprover);
+                }else{
+                    DB::table('t_po02')
+                    ->where('ponum', $ptaNumber)
+                    ->whereIn('poitem', $poItems)
+                    ->update([
+                        'approvestat'   => 'A'
+                    ]);
                 }
 
                 $checkIsFullApprove = DB::table('t_po_approval')
                                           ->where('ponum', $ptaNumber)
+                                          ->whereIn('poitem', $poItems)
                                           ->where('approval_status', '!=', 'A')
                                           ->get();
                 if(sizeof($checkIsFullApprove) > 0){

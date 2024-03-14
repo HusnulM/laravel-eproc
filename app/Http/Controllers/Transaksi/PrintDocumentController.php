@@ -224,7 +224,9 @@ class PrintDocumentController extends Controller
     }
 
     public function printpolist(Request $req){
-        $query = DB::table('v_rpo_v2')->select('id','ponum','podat','approvestat','vendor','note','vendor_name','deptname', 'totalprice','createdby')->distinct();
+        $query = DB::table('v_polist')
+        ->select('id','ponum','podat','postat','vendor','note','vendor_name','deptname', 'totalprice','createdby')
+        ->distinct();
 
         if(isset($req->department)){
             if($req->department !== 'All'){

@@ -177,18 +177,18 @@
                     // },
                     // {data: "unit"},
                     {data: "deptname"},
-                    {data: "approvestat",
-                        render: function (data, type, row){
-                            if(row.approvestat == "O"){
-                                return `Open`;
-                            }else if(row.approvestat == "A"){
-                                return `Approved`;
-                            }else if(row.approvestat == "R"){
-                                return `Rejected`;
-                            }else{
-                                return `Open`;
-                            }
-                        }
+                    {data: "postat",
+                        // render: function (data, type, row){
+                        //     if(row.approvestat == "O"){
+                        //         return `Open`;
+                        //     }else if(row.approvestat == "A"){
+                        //         return `Approved`;
+                        //     }else if(row.approvestat == "R"){
+                        //         return `Rejected`;
+                        //     }else{
+                        //         return `Open`;
+                        //     }
+                        // }
                     },
                     {data: "note" },
                     // {data: "approvestat" },
