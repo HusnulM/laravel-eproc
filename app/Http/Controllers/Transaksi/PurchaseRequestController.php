@@ -300,9 +300,18 @@ class PurchaseRequestController extends Controller
             $prItems    = array();
             $count      = 0;
 
+            $idProject = null;
+
             for($i = 0; $i < sizeof($parts); $i++){
                 $qty    = $quantity[$i];
                 $qty    = str_replace(',','',$qty);
+
+                $pbjProject = DB::table('t_pbj02')
+                              ->where('pbjnumber', $pbjnum[$i] ?? 0)->first();
+
+                if($pbjProject){
+                    $idProject = $pbjProject->idproject;
+                }
 
                 if($pritem[$i]){
                     $count = $pritem[$i];
@@ -331,6 +340,7 @@ class PurchaseRequestController extends Controller
                         'pbjnumber'    => $pbjnum[$i] ?? 0,
                         'pbjitem'      => $pbjitm[$i] ?? 0,
                         'no_plat'      => $nopol[$i] ?? null,
+                        'idproject'    => $idProject,
                         'createdon'    => getLocalDatabaseDateTime(),
                         'createdby'    => Auth::user()->email ?? Auth::user()->username
                     );
