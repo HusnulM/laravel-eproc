@@ -278,7 +278,7 @@ class PurchaseRequestController extends Controller
             // $amount = $req['nominal'];
             // $amount = str_replace(',','',$amount);
             DB::table('t_pr01')->where('id', $prid)->update([
-                'prnum'             => $ptaNumber,
+                // 'prnum'             => $ptaNumber,
                 'prdate'            => $req['tglreq'],
                 'deptid'            => Auth::user()->deptid,
                 'requestby'         => $req['requestor'],
@@ -295,23 +295,15 @@ class PurchaseRequestController extends Controller
             $pbjitm   = $req['pbjitem'];
             $nopol    = $req['nopol'];
             $pritem   = $req['pritem'];
+            $project  = $req['project'];
 
             $insertData = array();
             $prItems    = array();
             $count      = 0;
 
-            $idProject = null;
-
             for($i = 0; $i < sizeof($parts); $i++){
                 $qty    = $quantity[$i];
                 $qty    = str_replace(',','',$qty);
-
-                $pbjProject = DB::table('t_pbj02')
-                              ->where('pbjnumber', $pbjnum[$i] ?? 0)->first();
-
-                if($pbjProject){
-                    $idProject = $pbjProject->idproject;
-                }
 
                 if($pritem[$i]){
                     $count = $pritem[$i];
@@ -325,10 +317,13 @@ class PurchaseRequestController extends Controller
                         'pbjnumber'    => $pbjnum[$i] ?? 0,
                         'pbjitem'      => $pbjitm[$i] ?? 0,
                         'no_plat'      => $nopol[$i] ?? null,
-                        // 'createdon'    => getLocalDatabaseDateTime(),
-                        // 'createdby'    => Auth::user()->email ?? Auth::user()->username
+                        'idproject'    => $project[$i] ?? 0,
+                        'createdon'    => $prhdr->createdon,
+                        'createdby'    => $prhdr->createdby
                     );
                 }else{
+
+
                     $count += 1;
                     $data = array(
                         'prnum'        => $ptaNumber,
@@ -340,7 +335,7 @@ class PurchaseRequestController extends Controller
                         'pbjnumber'    => $pbjnum[$i] ?? 0,
                         'pbjitem'      => $pbjitm[$i] ?? 0,
                         'no_plat'      => $nopol[$i] ?? null,
-                        'idproject'    => $idProject,
+                        'idproject'    => $project[$i] ?? 0,
                         'createdon'    => getLocalDatabaseDateTime(),
                         'createdby'    => Auth::user()->email ?? Auth::user()->username
                     );

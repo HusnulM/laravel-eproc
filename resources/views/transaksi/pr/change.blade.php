@@ -15,7 +15,7 @@
     </style>
 @endsection
 
-@section('content')        
+@section('content')
 <div class="container-fluid">
     {{-- action="{{ url('proc/pr/update') }}/{{ $prhdr->id }}"  --}}
     <form id="form-submit-data" method="post" enctype="multipart/form-data">
@@ -26,17 +26,17 @@
                     <div class="card-header">
                         <h3 class="card-title">Update Purchase Request</h3>
                         <div class="card-tools">
-                            {{-- <a href="{{ url('/printdoc/pr/print') }}/{{ $prhdr->id}}" target="_blank" class='btn btn-success btn-sm button-print'> 
+                            {{-- <a href="{{ url('/printdoc/pr/print') }}/{{ $prhdr->id}}" target="_blank" class='btn btn-success btn-sm button-print'>
                                 <i class='fa fa-print'></i> Print
                             </a> --}}
-                            <a href="{{ url('/proc/pr/listpr') }}" class='btn btn-default btn-sm btn-update-pr'> 
+                            <a href="{{ url('/proc/pr/listpr') }}" class='btn btn-default btn-sm btn-update-pr'>
                                 <i class='fa fa-arrow-left'></i> Back
                             </a>
                             <button type="submit" class="btn btn-primary btn-sm btn-update-pr">
                                 <i class="fas fa-save"></i> Update Purchase Request
-                            </button> 
+                            </button>
 
-                            <a href="{{ url('/proc/pr/delete') }}/{{ $prhdr->id }}" class='btn btn-danger btn-sm btn-update-pr'> 
+                            <a href="{{ url('/proc/pr/delete') }}/{{ $prhdr->id }}" class='btn btn-danger btn-sm btn-update-pr'>
                                 <i class='fa fa-trash'></i> Hapus Purchase Request
                             </a>
                         </div>
@@ -103,7 +103,7 @@
                                                     <a class="nav-link" id="custom-content-above-attachment-tab" data-toggle="pill" href="#custom-content-above-attachment" role="tab" aria-controls="custom-content-above-attachment" aria-selected="false">Attachment</a>
                                                 </li>
                                             </ul>
-                                        </div>                                    
+                                        </div>
                                     </div>
 
                                     <div class="card-body">
@@ -157,6 +157,7 @@
                                                                                 <input type="hidden" class="form-control" name="pbjnumber[]" value="{{ $row->pbjnumber }}">
                                                                                 <input type="hidden" class="form-control" name="pbjitem[]" value="{{ $row->pbjitem }}">
                                                                                 <input type="hidden" class="form-control" name="nopol[]" value="{{ $row->no_plat }}">
+                                                                                <input type="hidden" class="form-control" name="project[]" value="{{ $row->idproject }}">
                                                                             </td>
                                                                             <td style="text-align: center;">
                                                                                 <button type="button" class="btn btn-danger btn-sm btn-delete-item" data-prnum="{{ $row->prnum }}" data-pritem="{{ $row->pritem }}">
@@ -165,7 +166,7 @@
                                                                             </td>
                                                                         </tr>
                                                                         @endforeach
-                                                                    </tbody>                                            
+                                                                    </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -199,10 +200,10 @@
                                                                                 Open
                                                                             </td>
                                                                             @endif
-                                                                            
+
                                                                             <td>
                                                                                 @if($row->approval_date != null)
-                                                                                    <i class="fa fa-clock"></i> 
+                                                                                    <i class="fa fa-clock"></i>
                                                                                     ({{ formatDateTime($row->approval_date) }})
                                                                                 @endif
                                                                             </td>
@@ -210,10 +211,10 @@
                                                                         </tr>
                                                                         @endforeach
                                                                     </tbody>
-                                                                </table>                                                    
+                                                                </table>
                                                             </div>
                                                         </div>
-                                                    </div>   
+                                                    </div>
 
                                                     <div class="tab-pane fade" id="custom-content-above-attachment" role="tabpanel" aria-labelledby="custom-content-above-attachment-tab">
                                                         <div class="row">
@@ -243,13 +244,13 @@
                                                                         </tr>
                                                                     @endforeach
                                                                     </tbody>
-                                                                </table>                           
+                                                                </table>
                                                             </div>
                                                         </div>
-                                                    </div>    
+                                                    </div>
                                                 </div>
-        
-                                                
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -291,14 +292,14 @@
                                 <th>Figure</th>
                                 <th>Remark</th>
                                 <th style="width:50px; text-align:center;">
-                                    
+
                                 </th>
                             </thead>
                             <tbody>
 
                             </tbody>
-                        </table>  
-                    </div> 
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -334,8 +335,8 @@
                             <th></th>
                         </thead>
                         <tbody></tbody>
-                    </table>  
-                </div> 
+                    </table>
+                </div>
             </div>
         </div>
         <div class="modal-footer justify-content-between">
@@ -359,7 +360,7 @@
                 <div class="position-relative row form-group">
                     <div class="col-lg-12" id="fileViewer">
                         <!-- <div id="example1"></div> -->
-                        
+
                     </div>
                 </div>
             </div>
@@ -372,26 +373,26 @@
         </div>
         </form>
     </div>
-</div>   
+</div>
 @endsection
 
 @section('additional-js')
 <script src="{{ asset('/assets/js/select2.min.js') }}"></script>
-<script>    
-    function previewFile(files){         
+<script>
+    function previewFile(files){
         // alert(base_url)
         var pathfile = base_url+'/'+files;
         if(files !== ""){
             $('#fileViewer').html('');
             $('#fileViewer').append(`
                 <embed src="`+ pathfile +`" frameborder="0" width="100%" height="500px">
-            
+
             `);
 
             var fileUri = pathfile;
             fileUri = fileUri.replace("#toolbar=0", "?force=true");
-            
-            document.getElementById("btnDownloadFile").href=fileUri; 
+
+            document.getElementById("btnDownloadFile").href=fileUri;
             $('#modalPreviewFile').modal('show');
         } else{
             swal("File Not Found", "", "warning");
@@ -428,14 +429,14 @@
                         toastr.success(response.message)
                         // }else if(_action === "R"){
                         //     toastr.success(response.message)
-                        // }                        
+                        // }
                         // $(this).closest("tr").remove();
-                        setTimeout(function(){ 
+                        setTimeout(function(){
                             window.location.href = base_url+'/proc/pr/change/{{ $prhdr->id }}';
                         }, 2000);
                     }else{
                         toastr.error(response.message);
-                        setTimeout(function(){ 
+                        setTimeout(function(){
                             location.reload();
                         }, 2000);
                     }
@@ -444,7 +445,7 @@
                     console.log(error);
                     toastr.error(error)
 
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         location.reload();
                     }, 2000);
                 }
@@ -477,7 +478,7 @@
                     { "data": null,"sortable": false, "searchable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
+                        }
                     },
                     {data: "material", className: 'uid'},
                     {data: "matdesc", className: 'fname'},
@@ -486,7 +487,7 @@
                     // {data: "whsname", className: 'fname'},
                     {data: "availableQty", "className": "text-right"},
                     {data: "matunit", className: 'fname'},
-                    {"defaultContent": 
+                    {"defaultContent":
                         "<button type='button' class='btn btn-primary btn-sm button-add-material'> <i class='fa fa-plus'></i> Add</button>"
                     }
                 ],
@@ -512,7 +513,7 @@
                                 <input type="hidden" name="matdesc[]" id="partdesc`+fCount+`" class="form-control" value="`+ selected_data.matdesc +`" readonly>
                                 <input type="hidden" class="form-control" name="pritem[]">
                             </td>
-                            
+
                             <td>
                                 <input type="text" name="quantity[]" class="form-control inputNumber" style="text-align:right;" required>
                             </td>
@@ -525,6 +526,7 @@
                                 <input type="hidden" name="pbjnumber[]" id="pbjnum`+fCount+`" class="form-control">
                                 <input type="hidden" name="pbjitem[]" id="pbjitm`+fCount+`" class="form-control">
                                 <input type="hidden" name="nopol[]" id="nopol`+fCount+`" class="form-control">
+                                <input type="hidden" class="form-control" name="project[]">
                             </td>
                             <td style="text-align:center;">
                                 <button type="button" class="btn btn-danger btn-sm" id="btnRemove`+fCount+`">
@@ -533,7 +535,7 @@
                             </td>
                         </tr>
                     `);
-    
+
                     $('#btnRemove'+fCount).on('click', function(e){
                         e.preventDefault();
                         var row_index = $(this).closest("tr").index();
@@ -551,7 +553,7 @@
                 }else{
                     return false;
                 }
-            }); 
+            });
         }
 
         function removeItem(index){
@@ -583,7 +585,7 @@
                     { "data": null,"sortable": false, "searchable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
+                        }
                     },
                     {data: "pbjnumber", className: 'uid'},
                     {data: "tgl_pbj", className: 'uid'},
@@ -592,10 +594,10 @@
                     {data: "description"},
                     {data: "quantity", "className": "text-right",},
                     {data: "openqty", "className": "text-right",},
-                    {data: "unit"},      
+                    {data: "unit"},
                     {data: "figure"},
-                    {data: "remark"},      
-                    {"defaultContent": 
+                    {data: "remark"},
+                    {"defaultContent":
                         `
                         <button class='btn btn-success btn-sm button-add-pbj-to-pritem'> <i class="fa fa-plus"></i></button>
                         `,
@@ -613,7 +615,7 @@
                     }else{
                         return false;
                     }
-                }); 
+                });
             }
 
             function removePbjItem(index){
@@ -624,7 +626,7 @@
                 var table = $('#tbl-pbj-list').DataTable();
                 selected_data = [];
                 selected_data = table.row($(this).closest('tr')).data();
-                
+
 
                 if(checkPbjSelected(selected_data.pbjnumber, selected_data.pbjitem)){
                     console.log(selected_pbj_items);
@@ -640,7 +642,7 @@
                                 <input type="hidden" name="matdesc[]" id="partdesc`+fCount+`" class="form-control" value="`+ selected_data.description +`" readonly>
                                 <input type="hidden" class="form-control" name="pritem[]">
                             </td>
-                            
+
                             <td>
                                 <input type="text" name="quantity[]" class="form-control inputNumber" value="`+selected_data.openqty+`" style="text-align:right;" required>
                             </td>
@@ -654,6 +656,7 @@
                                 <input type="hidden" name="pbjnumber[]" id="pbjnum`+fCount+`" class="form-control" value="`+selected_data.pbjnumber+`">
                                 <input type="hidden" name="pbjitem[]" id="pbjitm`+fCount+`" class="form-control" value="`+selected_data.pbjitem+`">
                                 <input type="hidden" name="nopol[]" id="nopol`+fCount+`" class="form-control" value="`+selected_data.unit_desc+`">
+                                <input type="hidden" class="form-control" name="project[]" value="`+ selected_data.idproject +`">
                             </td>
                             <td style="text-align:center;">
                                 <button type="button" class="btn btn-danger btn-sm btnRemove" id="btnRemove`+fCount+`">
@@ -662,7 +665,7 @@
                             </td>
                         </tr>
                     `);
-        
+
                     $('#btnRemove'+fCount).on('click', function(e){
                         e.preventDefault();
                         var row_index = $(this).closest("tr").index();
@@ -671,34 +674,34 @@
 
                         console.log(selected_pbj_items);
                     });
-    
+
                     $('.inputNumber').on('change', function(){
                         this.value = formatRupiah(this.value,'');
                     });
-    
+
                     $('.inputNumber').on('keypress', function(e){
                         validate(e);
                     });
-    
+
                     function formatRupiah(angka, prefix){
                         var number_string = angka.toString().replace(/[^.\d]/g, '').toString(),
                         split   		  = number_string.split('.'),
                         sisa     		  = split[0].length % 3,
                         rupiah     		  = split[0].substr(0, sisa),
                         ribuan     		  = split[0].substr(sisa).match(/\d{3}/gi);
-                    
+
                         if(ribuan){
                             separator = sisa ? ',' : '';
                             rupiah += separator + ribuan.join(',');
                         }
-                    
+
                         rupiah = split[1] != undefined ? rupiah + '.' + split[1] : rupiah;
-                        return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');            
+                        return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
                     }
-    
+
                     function validate(evt) {
                         var theEvent = evt || window.event;
-    
+
                         // Handle paste
                         if (theEvent.type === 'paste') {
                             key = event.clipboardData.getData('text/plain');
@@ -721,7 +724,7 @@
 
         $('#form-submit-data').on('submit', function(event){
             event.preventDefault();
-            // action="{{ url('proc/pr/update') }}/{{ $prhdr->id }}" 
+            // action="{{ url('proc/pr/update') }}/{{ $prhdr->id }}"
             var formData = new FormData(this);
             console.log($(this).serialize())
             $.ajax({
@@ -742,7 +745,7 @@
                 },
                 error:function(error){
                     toastr.error(error)
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         location.reload();
                     }, 2000);
                 }
@@ -750,17 +753,17 @@
                 console.log(result)
                 if(result.msgtype === "200"){
                     toastr.success(result.message)
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         window.location.href = base_url+'/proc/pr/change/{{ $prhdr->id }}';
                     }, 2000);
                 }else{
                     toastr.error(result.message)
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         location.reload();
                     }, 2000);
                 }
             }) ;
-            
+
         });
     });
 </script>
