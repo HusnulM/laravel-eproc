@@ -266,6 +266,7 @@
                             <th>No</th>
                             <th>Material</th>
                             <th>Description</th>
+                            <th>Category</th>
                             <th>Available Quantity</th>
                             <th>Unit</th>
                             <th></th>
@@ -339,7 +340,7 @@
                     },
                     {data: "material", className: 'uid'},
                     {data: "matdesc", className: 'fname'},
-                    // {data: "partnumber", className: 'fname'},
+                    {data: "mattypedesc", className: 'fname'},
                     {data: "availableQty", "className": "text-right"},
                     {data: "matunit", className: 'fname'},
                     {"defaultContent":

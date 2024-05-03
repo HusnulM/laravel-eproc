@@ -23,11 +23,11 @@ class EmailNotifController extends Controller
              ->where('prcreated','N')
              ->where('deptid',$row->deptid)
              ->orderBy('id')->get();
-    
+
             $mailto = DB::table('users')
                     ->where('deptid', $row->deptid)
-                    ->pluck('email');    
-            
+                    ->pluck('email');
+
             if(sizeof($data) > 0){
                 Mail::to($mailto)->queue(new NotifPBJDueDateMail($data));
             }
@@ -49,11 +49,11 @@ class EmailNotifController extends Controller
 
             $mailto = DB::table('users')
                     ->where('deptid', $row->deptid)
-                    ->pluck('email'); 
+                    ->pluck('email');
 
             if(sizeof($data) > 0){
                 Mail::to($mailto)->queue(new NotifPRDueDateMail($data));
-            }            
+            }
         }
     }
 
@@ -61,20 +61,20 @@ class EmailNotifController extends Controller
         $dept = DB::table('v_po_duedate')
                ->select('deptid')->distinct()
                ->where('openqty','>',0)->get();
-        
+
        foreach($dept as $row){
             $data = DB::table('v_po_duedate')
                     ->where('duedate','>','3')
                     ->where('openqty','>',0)
                     ->where('deptid', $row->deptid)
                     ->orderBy('id')->get();
-    
+
             $mailto = DB::table('users')
                         ->where('deptid', $row->deptid)
-                        ->pluck('email'); 
+                        ->pluck('email');
             if(sizeof($data) > 0){
                 Mail::to($mailto)->queue(new NotifPODueDateMail($data));
-            }    
+            }
         }
     }
 }
