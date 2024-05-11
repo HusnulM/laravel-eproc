@@ -292,7 +292,7 @@ class BastController extends Controller
             return Redirect::to("/logistic/bast")->withSuccess('BAST Berhasil disimpan');
         } catch(\Exception $e){
             DB::rollBack();
-            dd($e);
+            // dd($e);
             return Redirect::to("/logistic/bast")->withError($e->getMessage());
             // return Redirect::to("/logistic/bast/create/".$req['pbjID'])->withError($e->getMessage());
         }
