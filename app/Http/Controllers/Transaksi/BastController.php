@@ -206,8 +206,6 @@ class BastController extends Controller
                 );
                 array_push($insertData, $data);
 
-
-
                 $pbjitem = DB::table('t_pbj02')
                             ->where('pbjnumber', $pbjnum[$i])
                             ->where('pbjitem', $pbjitm[$i])->first();
@@ -281,20 +279,22 @@ class BastController extends Controller
             DB::commit();
 
             $checkBastAll = DB::table('t_pbj02')
-                            ->where('pbjnumber', $pbjnum[0])
+                            ->where('pbjnumber', $pbjheader->pbjnumber)
                             ->where('bast_created', 'N')->first();
             if(!$checkBastAll){
-                DB::table('t_pbj01')->where('pbjnumber', $pbjnum[$i])
+                DB::table('t_pbj01')->where('pbjnumber', $pbjheader->pbjnumber)
                     ->update([
                         'bast_created' => 'Y'
                     ]);
-                DB::commit();
             }
+
+            DB::commit();
             return Redirect::to("/logistic/bast")->withSuccess('BAST Berhasil disimpan');
         } catch(\Exception $e){
             DB::rollBack();
-            // dd($e);
-            return Redirect::to("/logistic/bast/create/".$req['pbjID'])->withError($e->getMessage());
+            dd($e);
+            return Redirect::to("/logistic/bast")->withError($e->getMessage());
+            // return Redirect::to("/logistic/bast/create/".$req['pbjID'])->withError($e->getMessage());
         }
     }
 
