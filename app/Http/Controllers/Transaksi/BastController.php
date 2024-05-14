@@ -127,6 +127,7 @@ class BastController extends Controller
                     continue;
                 }
 
+                $qty    = 0;
                 $qty    = $quantity[$i];
                 $qty    = str_replace(',','',$qty);
 
@@ -150,13 +151,6 @@ class BastController extends Controller
                         if($latestStock->quantity < $qty){
                             DB::rollBack();
                             return Redirect::to("/logistic/bast/create/".$req['pbjID'])->withError('Stock Tidak Mencukupi untuk part : '. $parts[$i]);
-                        }else{
-                                        //    DB::table('t_inv_stock')
-                                        //        ->where('material', $parts[$i])
-                                        //        ->where('whscode',  $wodata->whscode)
-                                        //        ->update([
-                                        //            'quantity'     => $latestStock->quantity - $qty
-                                        //        ]);
                         }
                     }else{
                         DB::rollBack();
@@ -175,13 +169,6 @@ class BastController extends Controller
                         if($latestStock->quantity < $qty){
                             DB::rollBack();
                             return Redirect::to("/logistic/bast/create/".$req['pbjID'])->withError('Stock Tidak Mencukupi untuk part : '. $parts[$i]);
-                        }else{
-                            // DB::table('t_inv_stock')
-                            // ->where('material', $parts[$i])
-                            // ->where('whscode',  $pbjdtl->whscode)
-                            // ->update([
-                            //     'quantity'     => $latestStock->quantity - $qty
-                            // ]);
                         }
                     }else{
                         DB::rollBack();
@@ -190,7 +177,6 @@ class BastController extends Controller
                 }
 
                 $matdesc = str_replace('"','\"',$partdsc[$i]);
-                // $matdesc = str_replace("'","\''",$partdsc[$i]);
 
                 $data = array(
                     'bast_id'      => $bastID,
@@ -220,11 +206,6 @@ class BastController extends Controller
                         'realized_qty' => $relQty
                     ]);
                 }else{
-                    // DB::table('t_pbj01')->where('pbjnumber', $pbjnum[$i])
-                    // ->update([
-                    //     'bast_created' => 'N'
-                    // ]);
-
                     DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
                     ->update([
                         // 'itemstatus'   => 'C',
