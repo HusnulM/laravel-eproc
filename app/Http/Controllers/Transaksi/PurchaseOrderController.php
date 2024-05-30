@@ -14,6 +14,7 @@ class PurchaseOrderController extends Controller
 {
     public function index(){
         $department = DB::table('t_department')->get();
+        return $department;
         $periode    = DB::table('t_budget_period')
                           ->where('pstatus', 'A')->get();
 
