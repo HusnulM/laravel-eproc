@@ -442,7 +442,7 @@ class PbjController extends Controller
                         'partnumber'   => $parts[$i],
                         'description'  => $partdsc[$i],
                         'quantity'     => $qty,
-                        'realized_qty' => $qty,
+                        'realized_qty' => 0,
                         'unit'         => $uom[$i],
                         'figure'       => $figure[$i],
                         'remark'       => $remark[$i],
