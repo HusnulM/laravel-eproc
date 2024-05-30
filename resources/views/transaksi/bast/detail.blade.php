@@ -31,17 +31,17 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                
+
                                 <div class="form-group">
                                     <label for="doctitle">NO. BAST</label>
                                     <p>{{ $header->no_bast }}</p>
-                                </div>  
+                                </div>
                                 <div class="form-group">
                                     <label>Pemberi:</label> {{$header->pemberi}}
                                 </div>
                                 <div class="form-group">
                                     <label>Penerima:</label> {{$header->penerima}}
-                                </div>                                
+                                </div>
                                 <div class="form-group">
                                     <label>Tanggal BAST:</label>
                                     <p>{!! formatDate($header->tanggal_bast) !!}
@@ -57,7 +57,7 @@
                                         <i class="fa fa-search"></i> Preview Attachment
                                     </button>
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
             <div class="card">
                 <div class="card-header">
                     <!-- <h3 class="card-title">Approve Document</h3> -->
-                    
+
                     <div class="card-tools">
                         <a href="{{ url('/logistic/bast/listbast') }}" class="btn btn-default btn-sm">
                             <i class="fa fa-arrow-left"></i> Back
@@ -97,7 +97,7 @@
                                             {{ $row->matdesc }}
                                         </td>
                                         <td style="text-align:right;">
-                                            {{ number_format($row->quantity,3) }}
+                                            {{ number_format($row->quantity,0) }}
                                         </td>
                                         <td>
                                             {{ $row->unit }}
@@ -113,7 +113,7 @@
                     </div>
                 </div>
             </div>
-                
+
         </div>
     </div>
 </div>
@@ -134,7 +134,7 @@
                 <div class="position-relative row form-group">
                     <div class="col-lg-12" id="fileViewer">
                         <!-- <div id="example1"></div> -->
-                        
+
                     </div>
                 </div>
             </div>
@@ -149,7 +149,7 @@
         </div>
         </form>
     </div>
-</div>   
+</div>
 @endsection
 
 @section('additional-js')
@@ -159,22 +159,22 @@
 <!-- <script src="https://cdn.scaleflex.it/plugins/filerobot-image-editor/3/filerobot-image-editor.min.js"></script> -->
 
 <script type="text/javascript">
-    function previewFile(files){         
+    function previewFile(files){
         // alert(base_url)
         var pathfile = base_url+'/'+files;
         if(files !== ""){
             $('#fileViewer').html('');
             $('#fileViewer').append(`
                 <embed src="`+ pathfile +`" frameborder="0" width="100%" height="500px">
-            
+
             `);
 
             var fileUri = pathfile;
             fileUri = fileUri.replace("#toolbar=0", "?force=true");
-            
+
             @if(userAllowDownloadDocument() == 1)
-                // document.getElementById("btnDownloadFile").href=base_url+fileUri; 
-                document.getElementById("btnDownloadFile").href=fileUri; 
+                // document.getElementById("btnDownloadFile").href=base_url+fileUri;
+                document.getElementById("btnDownloadFile").href=fileUri;
             @endif
             $('#modalPreviewFile').modal('show');
         } else{
@@ -182,8 +182,8 @@
         }
     }
 
-    $(document).ready(function () { 
-       
+    $(document).ready(function () {
+
     });
 </script>
 @endsection
