@@ -117,12 +117,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-lg-12 col-md-12">
-                                        <div class="form-group">
-                                            <label for="department">Department</label>
-                                            <input type="text" name="department" class="form-control" value="{{ getUserDepartment() }}" readonly>
-                                        </div>
-                                    </div> -->
+
                                     <div class="col-lg-12 col-md-12">
                                         <div class="form-group">
                                             <label for="remark">Remark</label>
