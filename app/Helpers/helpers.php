@@ -408,7 +408,11 @@ function getAppBgImage(){
 
 function getUserDepartment(){
     $userDept = DB::table('t_department')->where('deptid', Auth::user()->deptid)->first();
-    return $userDept->department;
+    if($userDept){
+        return $userDept->department;
+    }else{
+        return null;
+    }
 }
 
 function getCompanyAddress(){
