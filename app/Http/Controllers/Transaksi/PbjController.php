@@ -384,7 +384,7 @@ class PbjController extends Controller
                 $department = DB::table('t_department')->where('department', $req['kepada'])->first();
 
                 // $ptaNumber = generatePbjNumber($tahun, $department->deptid, $tgl);
-                $ptaNumber = generatePbjNumber($tahun, Auth::user()->deptid, $tgl);
+                $ptaNumber = generatePbjNumber($tahun, Auth::user()->deptid ?? $department->deptid, $tgl);
 
                 // return $ptaNumber;
 
@@ -393,7 +393,7 @@ class PbjController extends Controller
                 $PBJid = DB::table('t_pbj01')->insertGetId([
                     'pbjnumber'         => $ptaNumber,
                     'pbjtype'           => $req['pbjTYpe'],
-                    'deptid'            => Auth::user()->deptid,
+                    'deptid'            => Auth::user()->deptid ?? null,
                     'tgl_pbj'           => $req['tglpbj'],
                     'tujuan_permintaan' => $req['requestto'],
                     'kepada'            => $req['kepada'],
