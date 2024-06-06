@@ -216,8 +216,19 @@ class BastController extends Controller
 
 
                 //Insert movement
+                // $matID = null;
+                // $material = DB::table('t_material')->where('material', $parts[$i] )->first();
+                // if($material){
+                //     $matID = $material->id;
+                // }else{
+                //     $matID = $parts[$i];
+                // }
+
+                $matdesc = str_replace('"','\"',$partdsc[$i]);
+                $matCode = str_replace('"','\"',$parts[$i]);
+                // return $matCode;
                 DB::select('call spIssueMaterialWithBatchFIFO(
-                    "'. $parts[$i] .'",
+                    "'. $matCode .'",
                     "'. $warehouseID .'",
                     "'. $qty .'",
                     "'. $ptaNumber .'",
