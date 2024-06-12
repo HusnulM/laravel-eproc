@@ -31,25 +31,43 @@ class CancelApprovePrController extends Controller
         try{
             $wodata = DB::table('t_pr01')->where('id', $id)->first();
             if($wodata){
+                $ptaNumber = $wodata->prnum;
+                $creator   = DB::table('users')->where('email',  $wodata->createdby)->first();
+                $approval  = DB::table('v_workflow_budget')->where('object', 'PR')->where('requester', $creator->id)->get();
+                $prItems   = DB::table('t_pr02')->where('prnum', $ptaNumber)->get();
+
+                if(sizeof($approval) > 0){
+                    DB::table('t_pr_approvalv2')->where('prnum', $ptaNumber)->delete();
+                    foreach($prItems as $pitem){
+                        $insertApproval = array();
+                        foreach($approval as $row){
+                            $is_active = 'N';
+                            if($row->approver_level == 1){
+                                $is_active = 'Y';
+                            }
+                            $approvals = array(
+                                'prnum'             => $ptaNumber,
+                                'pritem'            => $pitem->pritem,
+                                'approver_level'    => $row->approver_level,
+                                'approver'          => $row->approver,
+                                'requester'         => $creator->id,
+                                'is_active'         => $is_active,
+                                'createdon'         => getLocalDatabaseDateTime()
+                            );
+                            array_push($insertApproval, $approvals);
+                        }
+                        insertOrUpdate($insertApproval,'t_pr_approvalv2');
+                    }
+                }
+
                 DB::table('t_pr01')->where('id', $id)->update([
                     'approvestat'   => 'N'
                 ]);
 
-                $firstApproval = DB::table('t_pr_approvalv2')
-                        ->where('prnum', $wodata->prnum)
-                        ->orderBy('approver_level', 'ASC')
-                        ->first();
-
-                DB::table('t_pr_approvalv2')->where('prnum', $wodata->prnum)->update([
-                    'approval_status' => 'N',
-                    'is_active'       => 'N'
+                DB::table('t_pr02')->where('prnum', $ptaNumber)->update([
+                    'approvestat'   => 'N'
                 ]);
 
-                DB::table('t_pr_approvalv2')->where('prnum', $wodata->prnum)
-                ->where('approver_level', $firstApproval->approver_level)
-                ->update([
-                    'is_active' => 'Y'
-                ]);
                 DB::commit();
 
                 $result = array(
