@@ -286,9 +286,11 @@
                     dataType: 'json',
                     cache:false,
                     success: function(result){
+                        console.log(result)
                     },
                     error: function(err){
                         console.log(err)
+                        toastr.info(err)
                     }
                 }).done(function(data){
 

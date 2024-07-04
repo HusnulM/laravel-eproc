@@ -732,7 +732,7 @@ class PurchaseOrderController extends Controller
     }
 
     public function sendPO(){
-        $poNumber = 'PO/20230612000001';
+        $poNumber = 'PO/20230706000001';
         $result   = sendPurchaseOrder($poNumber);
 
         return $result;
