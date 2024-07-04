@@ -1211,26 +1211,26 @@ function sendPurchaseOrder($poNumber){
 function mbpAPI($url, $apikey, $data=array()){
     $debugfileh = tmpfile();
     $curl       = curl_init();
-    try{
-        curl_setopt($curl, CURLOPT_POST, 1);
-        if ($data) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data) );
+    curl_setopt($curl, CURLOPT_POST, 1);
+    if ($data) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data) );
 
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'APIKEY: '.$apikey,
-            'Content-Type: application/json',
-        ));
-        // curl_setopt($curl, CURLOPT_VERBOSE, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        'APIKEY: '.$apikey,
+        'Content-Type: application/json',
+    ));
+    // curl_setopt($curl, CURLOPT_VERBOSE, 1);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 
-        $result = curl_exec($curl);
-        if(!$result){die("Connection Failure");}
-        curl_close($curl);
-        return $result;
-    }finally{
-        var_dump('curl verbose log:',file_get_contents(stream_get_meta_data($debugfileh)['uri']));
-        fclose($debugfileh);
-        // curl_close($curl);
-    }
+    $result = curl_exec($curl);
+    if(!$result){die("Connection Failure");}
+    curl_close($curl);
+    return $result;
+    // try{
+    // }finally{
+    //     var_dump('curl verbose log:',file_get_contents(stream_get_meta_data($debugfileh)['uri']));
+    //     fclose($debugfileh);
+    //     // curl_close($curl);
+    // }
 }
