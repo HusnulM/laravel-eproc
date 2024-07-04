@@ -290,7 +290,7 @@
                     },
                     error: function(err){
                         console.log(err)
-                        toastr.error(err)
+                        toastr.error(err.responseText)
                     }
                 }).done(function(data){
 
