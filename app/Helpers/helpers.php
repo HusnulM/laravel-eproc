@@ -1188,14 +1188,14 @@ function sendPurchaseOrder($poNumber){
         array_push($insertData, $submitData);
     }
 
-    // return $sendData;
+    return $sendData;
 
     $apikey  = 'B807C072-05ADCCE0-C1C82376-3EC92EF1';
     $url     = 'https://mahakaryabangunpersada.com/api/v1/submit/po';
     $get_api = mbpAPI($url, $apikey, $sendData);
 
     $response = json_decode($get_api, true);
-    return $response;
+    // return $response;
     $status   = $response['status'];
     $pesan    = $response['status_message'];
     $datajson = $response['data'];
