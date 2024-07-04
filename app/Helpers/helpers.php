@@ -1195,6 +1195,7 @@ function sendPurchaseOrder($poNumber){
     $get_api = mbpAPI($url, $apikey, $sendData);
 
     $response = json_decode($get_api, true);
+    return $response;
     $status   = $response['status'];
     $pesan    = $response['status_message'];
     $datajson = $response['data'];
