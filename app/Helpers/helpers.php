@@ -1220,7 +1220,7 @@ function mbpAPI($url, $apikey, $data=array()){
             'APIKEY: '.$apikey,
             'Content-Type: application/json',
         ));
-        curl_setopt($curl, CURLOPT_VERBOSE, 1);
+        // curl_setopt($curl, CURLOPT_VERBOSE, 1);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 
