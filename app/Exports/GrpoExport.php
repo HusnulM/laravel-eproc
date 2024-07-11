@@ -19,7 +19,7 @@ class GrpoExport implements FromCollection, WithHeadings, WithMapping
     */
     public function collection()
     {
-        $query = DB::table('v_rgrpo');
+        $query = DB::table('v_grpo_v2');
 
         if(isset($req->datefrom) && isset($req->dateto)){
             $query->whereBetween('docdate', [$req->datefrom, $req->dateto]);
@@ -44,6 +44,8 @@ class GrpoExport implements FromCollection, WithHeadings, WithMapping
             $row->matdesc,
             $row->quantity,
             $row->unit,
+            $row->unit_price,
+            $row->total_price,
             $row->ponum,
             $row->poitem,
             $row->whsname,
@@ -63,6 +65,8 @@ class GrpoExport implements FromCollection, WithHeadings, WithMapping
                 "Deskripsi",
                 "Quantity",
                 "Unit",
+                "Unit Price",
+                "Total Price",
                 "No. PO",
                 "PO Item",
                 "Warehouse",

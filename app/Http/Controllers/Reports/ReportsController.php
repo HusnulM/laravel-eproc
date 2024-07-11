@@ -259,7 +259,7 @@ class ReportsController extends Controller
     }
 
     public function grpoList(Request $req){
-        $query = DB::table('v_rgrpo');
+        $query = DB::table('v_grpo_v2');
 
         if(isset($req->datefrom) && isset($req->dateto)){
             $query->whereBetween('docdate', [$req->datefrom, $req->dateto]);
