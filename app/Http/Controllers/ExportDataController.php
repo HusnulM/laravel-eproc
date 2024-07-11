@@ -20,6 +20,7 @@ use App\Exports\CostPerkendaraanExport;
 use App\Exports\CostPerprojectExport;
 use App\Exports\DetailCostExport;
 use App\Exports\TransferExport;
+use App\Exports\GrpoExport;
 
 class ExportDataController extends Controller
 {
@@ -73,5 +74,9 @@ class ExportDataController extends Controller
 
     public function exportTransfer(Request $req){
         return Excel::download(new TransferExport($req), 'Laporan-Transfer-Item.xlsx');
+    }
+
+    public function exportGRPO(Request $req){
+        return Excel::download(new GrpoExport($req), 'Laporan-Penerimaan-PO.xlsx');
     }
 }
