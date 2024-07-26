@@ -197,7 +197,7 @@ class BastController extends Controller
                             ->where('pbjitem', $pbjitm[$i])->first();
 
                 $relQty = $pbjitem->realized_qty + $qty;
-                // dd($relQty);
+
                 if($relQty >= $pbjitem->quantity){
                     DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
                     ->update([
@@ -208,25 +208,13 @@ class BastController extends Controller
                 }else{
                     DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
                     ->update([
-                        // 'itemstatus'   => 'C',
-                        // 'bast_created' => 'N',
                         'realized_qty' => $relQty
                     ]);
                 }
 
-
-                //Insert movement
-                // $matID = null;
-                // $material = DB::table('t_material')->where('material', $parts[$i] )->first();
-                // if($material){
-                //     $matID = $material->id;
-                // }else{
-                //     $matID = $parts[$i];
-                // }
-
                 $matdesc = str_replace('"','\"',$partdsc[$i]);
                 $matCode = str_replace('"','\"',$parts[$i]);
-                // return $matCode;
+
                 DB::select('call spIssueMaterialWithBatchFIFO(
                     "'. $matCode .'",
                     "'. $warehouseID .'",
@@ -269,6 +257,11 @@ class BastController extends Controller
                 }
             }
             DB::commit();
+
+            // $pbjnum   = $req['pbjnumber'];
+            // $pbjitm   = $req['pbjitem'];
+
+            sleep(2);
 
             $checkBastAll = DB::table('t_pbj02')
                             ->where('pbjnumber', $pbjheader->pbjnumber)
