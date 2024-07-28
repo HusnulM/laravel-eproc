@@ -59,7 +59,7 @@ class InventoryMovementController extends Controller
                         return Redirect::to("/logistic/transfer")->withError('Stock Tidak Mencukupi untuk part : '. $parts[$i]);
                     }else{
 
-                        DB::select('call spTransferMaterialWithBatchFIFO(
+                        DB::select('call spTransferMaterialWithBatchFIFO2(
                             "'. $parts[$i] .'",
                             "'. $whscode .'",
                             "'. $whscode2 .'",

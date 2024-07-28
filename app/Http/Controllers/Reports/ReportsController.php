@@ -394,4 +394,126 @@ class ReportsController extends Controller
         })
         ->toJson();
     }
+
+    public function stockhistory()
+    {
+        $warehouse = DB::table('t_warehouse')->get();
+        return view('laporan.historystock', ['warehouse' => $warehouse]);
+    }
+
+    public function getHistoryStock(Request $req)
+    {
+        $whsCode = 0;
+        if(isset($req->whsid)){
+            $whsCode = $req->whsid;
+        }
+
+        $materials = DB::table('v_material_movements')
+                    ->get();
+
+
+
+        // call spGetStockHistory('2024-07-28','2024-07-28',0);
+        // DB::select('call spGetStockHistory('". $req->datefrom ."','". $req->datefrom ."',"'. $whsCode .'")');
+
+        $strDate = date('Y-m-d');
+        // return $strDate;
+        if(isset($req->datefrom)){
+            $strDate = $req->datefrom;
+        }
+
+        $endDate = date('Y-m-d');
+        // return $strDate;
+        if(isset($req->dateto)){
+            $endDate = $req->dateto;
+        }
+
+        $beginQty = DB::table('v_inv_movement')
+                    ->select(DB::raw('material'), DB::raw('whscode'), DB::raw('sum(quantity) as begin_qty'))
+                    ->where('postdate', '<', $strDate)
+                    // ->where('material', 'Bar Chainsaw')
+                    ->groupBy(DB::raw('material'), DB::raw('whscode'))
+                    ->get();
+        // return $beginQty;
+        $query = DB::select('call spGetStockHistory(
+            "'. $req->datefrom .'",
+            "'. $req->datefrom .'",
+            "'. $whsCode .'")');
+        // return $query;
+        $stocks = array();
+        foreach($materials as $key => $row){
+            foreach($query as $mat => $mrow){
+                if($row->material == $mrow->material){
+                    $bQty = 0;
+                    foreach($beginQty as $bqty => $mtqy){
+                        if($mtqy->material == $mrow->material && $mtqy->whscode == $mrow->whscode){
+                            $bQty = $bQty + $mtqy->begin_qty;
+                        }
+                    }
+                    $data = array(
+                        'id'        => $row->id,
+                        'material'  => $row->material,
+                        'matdesc'   => $row->matdesc,
+                        'begin_qty' => $bQty,
+                        'qty_in'    => $mrow->qty_in,
+                        'qty_out'   => $mrow->qty_out,
+                        'whscode'   => $mrow->whscode,
+                        'whsname'   => $mrow->whsname,
+                        'unit'      => $mrow->unit,
+                    );
+                    array_push($stocks, $data);
+                }
+            }
+        }
+
+        // return $stocks;
+        $stocks = collect($stocks)->sortBy('whscode')->values();
+        // return $stocks;
+
+        return Datatables::of($stocks)
+        // ->editColumn('begin_qty', function ($stocks){
+        //     return [
+        //         'bqty' => number_format($stocks->begin_qty,0)
+        //     ];
+        // })
+        ->addIndexColumn()
+        ->editColumn('qty_in', function ($stocks){
+            return [
+                'in' => number_format($stocks['qty_in'],0)
+            ];
+        })
+        ->editColumn('qty_out', function ($stocks){
+            return [
+                'out' => number_format($stocks['qty_out']*-1,0)
+            ];
+        })
+        // ->orderColumn('whscode', '-whscode $1')
+        // ->orderColumn('material', '-material $1')
+        ->make(true);
+        // return $query;
+
+        // $query = DB::table('v_mat_movements')
+        // ->select('id', 'material', 'matdesc', 'whscode', 'whsname')
+        // ->distinct();
+
+        // if(isset($req->whsid)){
+        //     $query->where('whscode', $req->whsid);
+        // }
+
+        // if(isset($req->datefrom) && isset($req->dateto)){
+        //     $query->whereBetween('postdate', [$req->datefrom, $req->dateto]);
+        // }elseif(isset($req->datefrom)){
+        //     $query->where('postdate', $req->datefrom);
+        // }elseif(isset($req->dateto)){
+        //     $query->where('postdate', $req->dateto);
+        // }
+
+        // return DataTables::queryBuilder($query)
+        // ->editColumn('quantity', function ($query){
+        //     return [
+        //         'qty1' => number_format($query->quantity,0)
+        //     ];
+        // })
+        // ->toJson();
+    }
 }

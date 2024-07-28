@@ -42,17 +42,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/issuelist',                'Reports\ReportsController@issueList')->middleware('checkAuth:report/issue');
         Route::post('/exportissued',            'ExportDataController@exportIssued')->middleware('checkAuth:report/issue');
 
-        Route::get('/stock',                    'Reports\ReportsController@stock')->middleware('checkAuth:report/stock');
-        Route::get('/stocklist',                'Reports\ReportsController@stockList')->middleware('checkAuth:report/stock');
-        Route::post('/exportstock',             'ExportDataController@exportStock')->middleware('checkAuth:report/stock');
+        Route::get('/stock',                     'Reports\ReportsController@stock')->middleware('checkAuth:report/stock');
+        Route::get('/stocklist',                 'Reports\ReportsController@stockList')->middleware('checkAuth:report/stock');
+        Route::post('/exportstock',              'ExportDataController@exportStock')->middleware('checkAuth:report/stock');
 
-        Route::get('/batchstock',               'Reports\ReportsController@batchStock')->middleware('checkAuth:report/batchstock');
-        Route::get('/batchstocklist',           'Reports\ReportsController@batchStockList')->middleware('checkAuth:report/batchstock');
-        Route::post('/exportbatchstock',        'ExportDataController@exportBatchStock')->middleware('checkAuth:report/batchstock');
+        Route::get('/batchstock',                'Reports\ReportsController@batchStock')->middleware('checkAuth:report/batchstock');
+        Route::get('/batchstocklist',            'Reports\ReportsController@batchStockList')->middleware('checkAuth:report/batchstock');
+        Route::post('/exportbatchstock',         'ExportDataController@exportBatchStock')->middleware('checkAuth:report/batchstock');
 
-        Route::get('/cost',                     'Reports\ReportsController@cost')->middleware('checkAuth:report/cost');
-        Route::get('/costlist',                 'Reports\ReportsController@costList')->middleware('checkAuth:report/cost');
-        Route::post('/exportcost',              'ExportDataController@exportCost')->middleware('checkAuth:report/cost');
+        Route::get('/cost',                      'Reports\ReportsController@cost')->middleware('checkAuth:report/cost');
+        Route::get('/costlist',                  'Reports\ReportsController@costList')->middleware('checkAuth:report/cost');
+        Route::post('/exportcost',               'ExportDataController@exportCost')->middleware('checkAuth:report/cost');
 
         Route::get('/cost01',                     'Reports\CostReportController@costPerKendaraan')->middleware('checkAuth:report/cost01');
         Route::get('/cost01list',                 'Reports\CostReportController@costPerKendaraanList')->middleware('checkAuth:report/cost01');
@@ -73,5 +73,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transfer',                   'Reports\TransferController@index')->middleware('checkAuth:report/transfer');
         Route::get('/transferlist',               'Reports\TransferController@getData')->middleware('checkAuth:report/transfer');
         Route::post('/exporttransfer',            'ExportDataController@exportTransfer')->middleware('checkAuth:report/transfer');
+
+        Route::get('/stockhistory',               'Reports\ReportsController@stockhistory')->middleware('checkAuth:report/stockhistory');
+        Route::get('/stockhistorylist',           'Reports\ReportsController@getHistoryStock')->middleware('checkAuth:report/stockhistory');
+        Route::post('/exportstockhistory',        'ExportDataController@exportTransfer')->middleware('checkAuth:report/stockhistory');
     });
 });
