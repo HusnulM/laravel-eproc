@@ -418,20 +418,12 @@ class ReportsController extends Controller
                         ->get();
         }
 
-
-        // return $materials;
-
-        // call spGetStockHistory('2024-07-28','2024-07-28',0);
-        // DB::select('call spGetStockHistory('". $req->datefrom ."','". $req->datefrom ."',"'. $whsCode .'")');
-
         $strDate = date('Y-m-d');
-        // return $strDate;
         if(isset($req->datefrom)){
             $strDate = $req->datefrom;
         }
 
         $endDate = date('Y-m-d');
-        // return $strDate;
         if(isset($req->dateto)){
             $endDate = $req->dateto;
         }
@@ -439,16 +431,13 @@ class ReportsController extends Controller
         $beginQty = DB::table('v_inv_movement')
                     ->select(DB::raw('material'), DB::raw('whscode'), DB::raw('sum(quantity) as begin_qty'))
                     ->where('postdate', '<', $strDate)
-                    // ->where('material', 'Bar Chainsaw')
                     ->groupBy(DB::raw('material'), DB::raw('whscode'))
                     ->get();
-        // return $beginQty;
 
         $query = DB::select('call spGetStockHistory(
             "'. $req->datefrom .'",
             "'. $req->datefrom .'",
             "'. $whsCode .'")');
-        // return $query;
 
         $mtMat = array();
         foreach ($query as $sg) {
@@ -508,32 +497,6 @@ class ReportsController extends Controller
                 );
                 array_push($stocks, $data);
             }
-            // $exists = 1;
-            // foreach($query as $mat => $mrow){
-            //     if($row->material == $mrow->material && $row->whscode == $mrow->whscode){
-            //         $bQty = 0;
-            //         foreach($beginQty as $bqty => $mtqy){
-            //             if($mtqy->material == $mrow->material && $mtqy->whscode == $mrow->whscode){
-            //                 $bQty = $bQty + $mtqy->begin_qty;
-            //             }
-            //         }
-            //         $data = array(
-            //             'id'        => $row->id,
-            //             'material'  => $row->material,
-            //             'matdesc'   => $row->matdesc,
-            //             'begin_qty' => $bQty,
-            //             'qty_in'    => $mrow->qty_in,
-            //             'qty_out'   => $mrow->qty_out,
-            //             'whscode'   => $mrow->whscode,
-            //             'whsname'   => $mrow->whsname,
-            //             'unit'      => $mrow->unit,
-            //         );
-            //         array_push($stocks, $data);
-            //     }else{
-            //         $exists = 0;
-            //         // break;
-            //     }
-            // }
         }
 
         // return $stocks;

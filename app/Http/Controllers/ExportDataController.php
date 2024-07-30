@@ -21,6 +21,7 @@ use App\Exports\CostPerprojectExport;
 use App\Exports\DetailCostExport;
 use App\Exports\TransferExport;
 use App\Exports\GrpoExport;
+use App\Exports\StockHistoryExport;
 
 class ExportDataController extends Controller
 {
@@ -78,5 +79,10 @@ class ExportDataController extends Controller
 
     public function exportGRPO(Request $req){
         return Excel::download(new GrpoExport($req), 'Laporan-Penerimaan-PO.xlsx');
+    }
+
+    public function exportStockHistory(Request $req){
+        // return $req;
+        return Excel::download(new StockHistoryExport($req), 'Laporan-History-Stock.xlsx');
     }
 }
