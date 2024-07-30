@@ -404,14 +404,22 @@ class ReportsController extends Controller
     public function getHistoryStock(Request $req)
     {
         $whsCode = 0;
-        if(isset($req->whsid)){
+        if(isset($req->whsid) && $req->whsid != 0){
             $whsCode = $req->whsid;
+            $materials = DB::table('v_material_movements')
+                        ->where('whscode', $req->whsid)
+                        ->orderBy('whscode', 'ASC')
+                        ->orderBy('material', 'ASC')
+                        ->get();
+        }else{
+            $materials = DB::table('v_material_movements')
+                        ->orderBy('whscode', 'ASC')
+                        ->orderBy('material', 'ASC')
+                        ->get();
         }
 
-        $materials = DB::table('v_material_movements')
-                    ->get();
 
-
+        // return $materials;
 
         // call spGetStockHistory('2024-07-28','2024-07-28',0);
         // DB::select('call spGetStockHistory('". $req->datefrom ."','". $req->datefrom ."',"'. $whsCode .'")');
@@ -435,35 +443,97 @@ class ReportsController extends Controller
                     ->groupBy(DB::raw('material'), DB::raw('whscode'))
                     ->get();
         // return $beginQty;
+
         $query = DB::select('call spGetStockHistory(
             "'. $req->datefrom .'",
             "'. $req->datefrom .'",
             "'. $whsCode .'")');
         // return $query;
+
+        $mtMat = array();
+        foreach ($query as $sg) {
+            $mtMat[] = $sg->material;
+        }
+
+        $ftWhs = array();
+        foreach ($query as $sg) {
+            $ftWhs[] = $sg->whscode;
+        }
+
         $stocks = array();
         foreach($materials as $key => $row){
-            foreach($query as $mat => $mrow){
-                if($row->material == $mrow->material){
-                    $bQty = 0;
-                    foreach($beginQty as $bqty => $mtqy){
-                        if($mtqy->material == $mrow->material && $mtqy->whscode == $mrow->whscode){
-                            $bQty = $bQty + $mtqy->begin_qty;
+            // $bQty = 0;
+            if(in_array($row->material, $mtMat)){
+                if(in_array($row->whscode, $ftWhs)){
+                    foreach($query as $mat => $mrow){
+                        if($row->material == $mrow->material && $row->whscode == $mrow->whscode){
+                            $bQty = 0;
+                            foreach($beginQty as $bqty => $mtqy){
+                                if($mtqy->material == $mrow->material && $mtqy->whscode == $mrow->whscode){
+                                    $bQty = $bQty + $mtqy->begin_qty;
+                                }
+                            }
+                            $data = array(
+                                'id'        => $row->id,
+                                'material'  => $row->material,
+                                'matdesc'   => $row->matdesc,
+                                'begin_qty' => $bQty,
+                                'qty_in'    => $mrow->qty_in,
+                                'qty_out'   => $mrow->qty_out,
+                                'whscode'   => $mrow->whscode,
+                                'whsname'   => $mrow->whsname,
+                                'unit'      => $mrow->unit,
+                            );
+                            array_push($stocks, $data);
                         }
                     }
-                    $data = array(
-                        'id'        => $row->id,
-                        'material'  => $row->material,
-                        'matdesc'   => $row->matdesc,
-                        'begin_qty' => $bQty,
-                        'qty_in'    => $mrow->qty_in,
-                        'qty_out'   => $mrow->qty_out,
-                        'whscode'   => $mrow->whscode,
-                        'whsname'   => $mrow->whsname,
-                        'unit'      => $mrow->unit,
-                    );
-                    array_push($stocks, $data);
                 }
+            }else{
+                $bQty = 0;
+                foreach($beginQty as $bqty => $mtqy){
+                    if($mtqy->material == $row->material && $mtqy->whscode == $row->whscode){
+                        $bQty = $bQty + $mtqy->begin_qty;
+                    }
+                }
+                $data = array(
+                    'id'        => $row->id,
+                    'material'  => $row->material,
+                    'matdesc'   => $row->matdesc,
+                    'begin_qty' => $bQty,
+                    'qty_in'    => 0,
+                    'qty_out'   => 0,
+                    'whscode'   => $row->whscode,
+                    'whsname'   => $row->whsname,
+                    'unit'      => $row->unit,
+                );
+                array_push($stocks, $data);
             }
+            // $exists = 1;
+            // foreach($query as $mat => $mrow){
+            //     if($row->material == $mrow->material && $row->whscode == $mrow->whscode){
+            //         $bQty = 0;
+            //         foreach($beginQty as $bqty => $mtqy){
+            //             if($mtqy->material == $mrow->material && $mtqy->whscode == $mrow->whscode){
+            //                 $bQty = $bQty + $mtqy->begin_qty;
+            //             }
+            //         }
+            //         $data = array(
+            //             'id'        => $row->id,
+            //             'material'  => $row->material,
+            //             'matdesc'   => $row->matdesc,
+            //             'begin_qty' => $bQty,
+            //             'qty_in'    => $mrow->qty_in,
+            //             'qty_out'   => $mrow->qty_out,
+            //             'whscode'   => $mrow->whscode,
+            //             'whsname'   => $mrow->whsname,
+            //             'unit'      => $mrow->unit,
+            //         );
+            //         array_push($stocks, $data);
+            //     }else{
+            //         $exists = 0;
+            //         // break;
+            //     }
+            // }
         }
 
         // return $stocks;
@@ -471,11 +541,6 @@ class ReportsController extends Controller
         // return $stocks;
 
         return Datatables::of($stocks)
-        // ->editColumn('begin_qty', function ($stocks){
-        //     return [
-        //         'bqty' => number_format($stocks->begin_qty,0)
-        //     ];
-        // })
         ->addIndexColumn()
         ->editColumn('qty_in', function ($stocks){
             return [
@@ -490,30 +555,6 @@ class ReportsController extends Controller
         // ->orderColumn('whscode', '-whscode $1')
         // ->orderColumn('material', '-material $1')
         ->make(true);
-        // return $query;
 
-        // $query = DB::table('v_mat_movements')
-        // ->select('id', 'material', 'matdesc', 'whscode', 'whsname')
-        // ->distinct();
-
-        // if(isset($req->whsid)){
-        //     $query->where('whscode', $req->whsid);
-        // }
-
-        // if(isset($req->datefrom) && isset($req->dateto)){
-        //     $query->whereBetween('postdate', [$req->datefrom, $req->dateto]);
-        // }elseif(isset($req->datefrom)){
-        //     $query->where('postdate', $req->datefrom);
-        // }elseif(isset($req->dateto)){
-        //     $query->where('postdate', $req->dateto);
-        // }
-
-        // return DataTables::queryBuilder($query)
-        // ->editColumn('quantity', function ($query){
-        //     return [
-        //         'qty1' => number_format($query->quantity,0)
-        //     ];
-        // })
-        // ->toJson();
     }
 }
