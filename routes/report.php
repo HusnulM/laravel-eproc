@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/stockhistory',               'Reports\ReportsController@stockhistory')->middleware('checkAuth:report/stockhistory');
         Route::get('/stockhistorylist',           'Reports\ReportsController@getHistoryStock')->middleware('checkAuth:report/stockhistory');
+        Route::post('/stockhistory',              'Reports\ReportsController@stockhistorydetails')->middleware('checkAuth:report/stockhistory');
         Route::post('/exportstockhistory',        'ExportDataController@exportStockHistory')->middleware('checkAuth:report/stockhistory');
     });
 });

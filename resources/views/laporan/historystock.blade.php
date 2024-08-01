@@ -65,6 +65,7 @@
                                     <th>OUT</th>
                                     <th>End Qty</th>
                                     <th>Unit</th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
 
@@ -80,7 +81,48 @@
 @endsection
 
 @section('additional-modal')
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="matMoveDetail">
+    <div class="modal-dialog modal-xl">
+        <form class="form-horizontal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalApprovalTitle">Material History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="position-relative row form-group">
+                    <div class="col-lg-12">
+                        <table id="tbl-matmove-list" class="table table-bordered table-hover table-striped table-sm" style="width:100%;">
+                            <thead>
+                                <th>No</th>
+                                <th>Docnum</th>
+                                <th>Year</th>
+                                <th>Date</th>
+                                <th>Material</th>
+                                <th>Description</th>
+                                <th>Warehouse</th>
+                                {{-- <th>WHS Dest</th> --}}
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Remark</th>
+                                <th>Trans Note</th>
+                            </thead>
+                            <tbody>
 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-approval"> OK</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('additional-js')
@@ -104,6 +146,7 @@
     }
 
     $(document).ready(function(){
+        let _token   = $('meta[name="csrf-token"]').attr('content');
 
         $('.btn-search').on('click', function(){
             var param = '?whsid='+$('#Warehouse').val()+'&datefrom='+ $('#datefrom').val() +'&dateto='+ $('#dateto').val();
@@ -139,15 +182,13 @@
                     {data: "material", className: 'uid'},
                     {data: "matdesc", className: 'uid'},
                     {data: "whsname", className: 'uid'},
-                    {data: "begin_qty", className: 'uid'},
-                    // {data: "qty_in", className: 'uid'},
+                    {data: "begin_qty", className: 'uid', "className": "text-right"},
                     {data: "qty_in", "sortable": false,
                         render: function (data, type, row){
                             return ``+ row.qty_in.in + ``;
                         },
                         "className": "text-right",
                     },
-                    // {data: "qty_out", className: 'uid'},
                     {data: "qty_out", "sortable": false,
                         render: function (data, type, row){
                             return ``+ row.qty_out.out + ``;
@@ -156,31 +197,113 @@
                     },
                     {data: null, className: 'uid',
                         render: function (data, type, row, meta) {
-                            console.log(row)
+                            // console.log(row)
                             return (row.begin_qty*1) + (row.qty_in.in*1) - (row.qty_out.out*1);
-                        }
+                        },
+                        "className": "text-right"
                     },
-                    // {data: "quantity", "sortable": false,
-                    //     render: function (data, type, row){
-                    //         return ``+ row.quantity.qty1 + ``;
-                    //     },
-                    //     "className": "text-right",
-                    // },
-                    // {data: "quantity", "sortable": false,
-                    //     render: function (data, type, row){
-                    //         return ``+ row.quantity.qty1 + ``;
-                    //     },
-                    //     "className": "text-right",
-                    // },
-                    // {data: "quantity", "sortable": false,
-                    //     render: function (data, type, row){
-                    //         return ``+ row.quantity.qty1 + ``;
-                    //     },
-                    //     "className": "text-right",
-                    // },
-                    {data: "unit"}
+                    {data: "unit"},
+                    {"defaultContent":
+                        `
+                         <button class='btn btn-primary btn-sm button-detail'> <i class='fa fa-search'></i> View Detail</button>
+                        `,
+                        "className": "text-center"
+                    }
                 ]
             });
+
+            $('#tbl-budget-list tbody').on( 'click', '.button-detail', function () {
+                var table = $('#tbl-budget-list').DataTable();
+                selected_data = [];
+                selected_data = table.row($(this).closest('tr')).data();
+                console.log(selected_data);
+                var matDetails = {
+                    "material"  : selected_data.material,
+                    "whscode"   : selected_data.whscode,
+                    "strdate"   : $('#datefrom').val(),
+                    "enddate"   : $('#dateto').val(),
+                    "_token" : _token
+                }
+
+                $("#tbl-matmove-list").DataTable({
+                    serverSide: true,
+                    ajax: {
+                        url: base_url+'/report/stockhistory',
+                        data: matDetails,
+                        type: 'POST'
+                    },
+                    buttons: false,
+                    searching: true,
+                    scrollY: 500,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    bDestroy: true,
+                    columns: [
+                        { "data": null,"sortable": false, "searchable": false,
+                            render: function (data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
+                        },
+                        {data: "docnum", className: 'uid'},
+                        {data: "docyear", className: 'uid'},
+                        {data: "postdate", className: 'uid'},
+                        {data: "material", className: 'uid'},
+                        {data: "matdesc", className: 'uid'},
+                        {data: "whsname", className: 'uid'},
+                        // {data: "whs_dest", className: 'uid'},
+                        {data: "quantity", "sortable": false,
+                            render: function (data, type, row){
+                                return ``+ row.quantity.qty + ``;
+                            },
+                            "className": "text-right",
+                        },
+                        {data: "unit"},
+                        {data: "remark", className: 'uid'},
+                        {data: "movement_info", className: 'uid'},
+                    ]
+                });
+
+                $('#matMoveDetail').modal('show');
+
+                // <th>Document Number</th>
+                //                 <th>Document Year</th>
+                //                 <th>Material</th>
+                //                 <th>Description</th>
+                //                 <th>Warehouse</th>
+                //                 <th>Warehouse Dest</th>
+                //                 <th>Quantity</th>
+                //                 <th>Unit</th>
+                //                 <th>Remark</th>
+                //                 <th>Trans Note</th>
+                // $.ajax({
+                //     url:base_url+'/report/stockhistory',
+                //     method:'post',
+                //     data:matDetails,
+                //     dataType:'JSON',
+                //     beforeSend:function(){
+                //     },
+                //     success:function(data)
+                //     {
+
+                //     },
+                //     error:function(err){
+                //         console.log(err);
+                //         toastr.error(err)
+                //     }
+                // }).done(function(response){
+                //     console.log(response);
+                //     $('#matMoveDetail').modal('show');
+                // });
+            });
+
+            // let table = new DataTable('#tbl-budget-list');
+
+            // table.on('click', 'tbody tr', function () {
+            //     let data = table.row(this).data();
+            //     console.log(data);
+
+            //     // alert('You clicked on ' + data[0] + "'s row");
+            // });
         }
 
 

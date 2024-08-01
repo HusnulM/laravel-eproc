@@ -72,6 +72,13 @@ class PurchaseRequestController extends Controller
             $params = $request->params;
             $whereClause = $params['sac'];
         }
+        // v_pbj_pr_selection
+        // $query = DB::table('v_pbj_pr_selection')
+        //          ->where('pbj_status', 'A')
+        //          ->where('approvestat', 'A')
+        //         //  ->where('itemstatus', '<>', 'C')
+        //          ->where('openqty', '>', 0)
+        //          ->orderBy('id');
         $query = DB::table('v_pbj02')
                  ->where('pbj_status', 'A')
                  ->where('approvestat', 'A')

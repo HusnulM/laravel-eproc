@@ -408,11 +408,13 @@ class ReportsController extends Controller
             $whsCode = $req->whsid;
             $materials = DB::table('v_material_movements')
                         ->where('whscode', $req->whsid)
+                        // ->where('material', 'Bar Chainsaw')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
         }else{
             $materials = DB::table('v_material_movements')
+                        // ->where('material', 'Bar Chainsaw')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
@@ -431,13 +433,16 @@ class ReportsController extends Controller
         $beginQty = DB::table('v_inv_movement')
                     ->select(DB::raw('material'), DB::raw('whscode'), DB::raw('sum(quantity) as begin_qty'))
                     ->where('postdate', '<', $strDate)
+
                     ->groupBy(DB::raw('material'), DB::raw('whscode'))
                     ->get();
 
         $query = DB::select('call spGetStockHistory(
-            "'. $req->datefrom .'",
-            "'. $req->datefrom .'",
+            "'. $strDate .'",
+            "'. $endDate .'",
             "'. $whsCode .'")');
+
+        // return $query;
 
         $mtMat = array();
         foreach ($query as $sg) {
@@ -519,5 +524,37 @@ class ReportsController extends Controller
         // ->orderColumn('material', '-material $1')
         ->make(true);
 
+    }
+
+    public function stockhistorydetails(Request $req)
+    {
+        $strDate  = $req->strdate;
+        $endDate  = $req->enddate;
+        $Material = $req->material;
+        $whsCode  = $req->whscode;
+
+        $query = DB::table('v_inv_move_details');
+        $query->where('material', $Material);
+        $query->where('whscode', $whsCode);
+        $query->whereBetween('postdate', [$strDate, $endDate]);
+
+        $query->orderBy('postdate', 'ASC');
+
+        return DataTables::queryBuilder($query)
+        ->editColumn('quantity', function ($query){
+            return [
+                'qty' => number_format($query->quantity,0)
+            ];
+        })
+        ->toJson();;
+
+        // return Datatables::of($matMovement)
+        //             ->addIndexColumn()
+        //             ->editColumn('quantity', function ($matMovement){
+        //                 return [
+        //                     'qty' => number_format($matMovement['quantity'],0)
+        //                 ];
+        //             })
+        //             ->make(true);
     }
 }
