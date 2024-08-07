@@ -276,8 +276,8 @@
                             },
                             "className": "text-right",
                         },
-                        {data: "nama_project"},
                         {data: "unit"},
+                        {data: "nama_project"},
                         {data: "remark", className: 'uid'},
                         {data: "movement_info", className: 'uid'},
                     ]
