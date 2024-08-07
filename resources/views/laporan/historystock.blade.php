@@ -281,9 +281,12 @@
                         {data: "remark", className: 'uid'},
                         {data: "movement_info", className: 'uid'},
                     ]
-                }).columns.adjust();
+                });
 
                 $('#matMoveDetail').modal('show');
+
+                var table = $('#tbl-budget-list').DataTable();
+                table.columns.adjust().draw();
             });
 
             // let table = new DataTable('#tbl-budget-list');
