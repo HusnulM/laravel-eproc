@@ -245,6 +245,9 @@
                 $('#whsCode1').val(selected_data.whscode);
                 $('#Material1').val(selected_data.material);
 
+                var tableDtl = new DataTable('#tbl-matmove-list');
+                tableDtl.clear().draw();
+
                 $("#tbl-matmove-list").DataTable({
                     serverSide: true,
                     ajax: {
@@ -286,8 +289,8 @@
                 $('#matMoveDetail').modal('show');
 
                 $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-                // var table = $('#tbl-budget-list').DataTable();
-                // table.columns.adjust().draw();
+                var table = $('#tbl-matmove-list').DataTable();
+                table.columns.adjust().draw();
             });
 
             // let table = new DataTable('#tbl-budget-list');
