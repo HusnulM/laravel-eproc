@@ -281,7 +281,7 @@
                         {data: "remark", className: 'uid'},
                         {data: "movement_info", className: 'uid'},
                     ]
-                });
+                }).columns.adjust();
 
                 $('#matMoveDetail').modal('show');
             });
