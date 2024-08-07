@@ -96,7 +96,7 @@
                     <div class="col-lg-12">
                         <table id="tbl-matmove-list" class="table table-bordered table-hover table-striped table-sm" style="width:100%;">
                             <thead>
-                                <th>No</th>
+                                {{-- <th>No</th> --}}
                                 <th>Docnum</th>
                                 <th>Year</th>
                                 <th>Date</th>
@@ -259,11 +259,11 @@
                     scrollCollapse: true,
                     bDestroy: true,
                     columns: [
-                        { "data": null,"sortable": false, "searchable": false,
-                            render: function (data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
+                        // { "data": null,"sortable": false, "searchable": false,
+                        //     render: function (data, type, row, meta) {
+                        //         return meta.row + meta.settings._iDisplayStart + 1;
+                        //     }
+                        // },
                         {data: "docnum", className: 'uid'},
                         {data: "docyear", className: 'uid'},
                         {data: "postdate", className: 'uid'},
