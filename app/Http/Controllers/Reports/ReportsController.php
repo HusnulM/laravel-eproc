@@ -522,7 +522,7 @@ class ReportsController extends Controller
         })
         ->editColumn('end_qty', function ($stocks){
             return [
-                'end' => number_format($stocks['begin_qty']+$stocks['qty_in']-$stocks['qty_out'],0)
+                'end' => number_format($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'],0)
             ];
         })
         // ->orderColumn('whscode', '-whscode $1')
