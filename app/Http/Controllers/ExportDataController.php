@@ -22,6 +22,7 @@ use App\Exports\DetailCostExport;
 use App\Exports\TransferExport;
 use App\Exports\GrpoExport;
 use App\Exports\StockHistoryExport;
+use App\Exports\StockHistoryDetailExport;
 
 class ExportDataController extends Controller
 {
@@ -84,5 +85,9 @@ class ExportDataController extends Controller
     public function exportStockHistory(Request $req){
         // return $req;
         return Excel::download(new StockHistoryExport($req), 'Laporan-History-Stock.xlsx');
+    }
+
+    public function exportStockHistoryDtl(){
+        return Excel::download(new StockHistoryDetailExport($req), 'Laporan-History-Detail-Stock.xlsx');
     }
 }

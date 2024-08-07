@@ -117,7 +117,21 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-approval"> OK</button>
+                <form action="{{ url('report/exportstockhistorydetails') }}" method="post">
+                    @csrf
+                    {{-- <div class="row">
+                        <input type="hidden" name="dtlDate1" id="dtlDate1">
+                        <input type="hidden" name="dtlDate2" id="dtlDate2">
+                        <input type="hidden" name="whsCode1" id="whsCode1">
+                        <input type="hidden" name="Material1" id="Material1">
+                        <div style="text-align:right;">
+                            <button type="submit" class="btn btn-success mt-2 btn-export pull-right">
+                                <i class="fa fa-download"></i> Export Data
+                            </button>
+                        </div>
+                    </div> --}}
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="submit-approval"> OK</button>
+                </form>
             </div>
         </div>
         </form>
@@ -198,7 +212,7 @@
                     {data: null, className: 'uid',
                         render: function (data, type, row, meta) {
                             // console.log(row)
-                            return (row.begin_qty*1) + (row.qty_in.in*1) - (row.qty_out.out*1);
+                            return (Number(row.begin_qty)) + (Number(row.qty_in.in)) - (Number(row.qty_out.out));
                         },
                         "className": "text-right"
                     },
@@ -225,6 +239,11 @@
                     "_token" : _token
                 }
 
+                $('#dtlDate1').val($('#datefrom').val());
+                $('#dtlDate2').val($('#dateto').val());
+                $('#whsCode1').val(selected_data.whscode);
+                $('#Material1').val(selected_data.material);
+
                 $("#tbl-matmove-list").DataTable({
                     serverSide: true,
                     ajax: {
@@ -250,7 +269,6 @@
                         {data: "material", className: 'uid'},
                         {data: "matdesc", className: 'uid'},
                         {data: "whsname", className: 'uid'},
-                        // {data: "whs_dest", className: 'uid'},
                         {data: "quantity", "sortable": false,
                             render: function (data, type, row){
                                 return ``+ row.quantity.qty + ``;
@@ -264,36 +282,6 @@
                 });
 
                 $('#matMoveDetail').modal('show');
-
-                // <th>Document Number</th>
-                //                 <th>Document Year</th>
-                //                 <th>Material</th>
-                //                 <th>Description</th>
-                //                 <th>Warehouse</th>
-                //                 <th>Warehouse Dest</th>
-                //                 <th>Quantity</th>
-                //                 <th>Unit</th>
-                //                 <th>Remark</th>
-                //                 <th>Trans Note</th>
-                // $.ajax({
-                //     url:base_url+'/report/stockhistory',
-                //     method:'post',
-                //     data:matDetails,
-                //     dataType:'JSON',
-                //     beforeSend:function(){
-                //     },
-                //     success:function(data)
-                //     {
-
-                //     },
-                //     error:function(err){
-                //         console.log(err);
-                //         toastr.error(err)
-                //     }
-                // }).done(function(response){
-                //     console.log(response);
-                //     $('#matMoveDetail').modal('show');
-                // });
             });
 
             // let table = new DataTable('#tbl-budget-list');
