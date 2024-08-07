@@ -212,7 +212,8 @@
                     {data: null, className: 'uid',
                         render: function (data, type, row, meta) {
                             // console.log(row)
-                            return (Number(row.begin_qty)) + (Number(row.qty_in.in)) - (Number(row.qty_out.out));
+                            return ``+ row.end_qty.end + ``;
+                            // return (Number(row.begin_qty)) + (Number(row.qty_in.in)) - (Number(row.qty_out.out));
                         },
                         "className": "text-right"
                     },

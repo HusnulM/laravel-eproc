@@ -520,6 +520,11 @@ class ReportsController extends Controller
                 'out' => number_format($stocks['qty_out']*-1,0)
             ];
         })
+        ->editColumn('end_qty', function ($stocks){
+            return [
+                'end' => number_format($stocks['begin_qty']+$stocks['qty_in']-$stocks['qty_out'],0)
+            ];
+        })
         // ->orderColumn('whscode', '-whscode $1')
         // ->orderColumn('material', '-material $1')
         ->make(true);
