@@ -285,8 +285,9 @@
 
                 $('#matMoveDetail').modal('show');
 
-                var table = $('#tbl-budget-list').DataTable();
-                table.columns.adjust().draw();
+                $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+                // var table = $('#tbl-budget-list').DataTable();
+                // table.columns.adjust().draw();
             });
 
             // let table = new DataTable('#tbl-budget-list');
