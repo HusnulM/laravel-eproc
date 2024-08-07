@@ -103,9 +103,9 @@
                                 <th>Material</th>
                                 <th>Description</th>
                                 <th>Warehouse</th>
-                                {{-- <th>WHS Dest</th> --}}
                                 <th>Quantity</th>
                                 <th>Unit</th>
+                                <th>Project</th>
                                 <th>Remark</th>
                                 <th>Trans Note</th>
                             </thead>
@@ -276,6 +276,7 @@
                             },
                             "className": "text-right",
                         },
+                        {data: "nama_project"},
                         {data: "unit"},
                         {data: "remark", className: 'uid'},
                         {data: "movement_info", className: 'uid'},

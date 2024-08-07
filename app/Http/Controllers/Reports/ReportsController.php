@@ -538,7 +538,7 @@ class ReportsController extends Controller
         $Material = $req->material;
         $whsCode  = $req->whscode;
 
-        $query = DB::table('v_inv_move_details');
+        $query = DB::table('v_inv_move_details_v2');
         $query->where('material', $Material);
         $query->where('whscode', $whsCode);
         $query->whereBetween('postdate', [$strDate, $endDate]);
