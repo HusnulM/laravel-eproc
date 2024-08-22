@@ -65,6 +65,7 @@
                                     <th>OUT</th>
                                     <th>End Qty</th>
                                     <th>Unit</th>
+                                    <th>Total Value</th>
                                     <th></th>
                                 </thead>
                                 <tbody>
@@ -218,6 +219,13 @@
                         "className": "text-right"
                     },
                     {data: "unit"},
+                    {data: null, className: 'uid',
+                        render: function (data, type, row, meta) {
+                            // console.log(row)
+                            return ``+ row.amount.value + ``;
+                        },
+                        "className": "text-right"
+                    },
                     {"defaultContent":
                         `
                          <button class='btn btn-primary btn-sm button-detail'> <i class='fa fa-search'></i> View Detail</button>

@@ -320,12 +320,17 @@ class ReportsController extends Controller
     }
 
     public function stockList(Request $req){
-        $query = DB::table('v_inv_summary_stock');
+        $query = DB::table('v_inv_summary_stock_withvalue');
 
         return DataTables::queryBuilder($query)
         ->editColumn('quantity', function ($query){
             return [
                 'qty1' => number_format($query->quantity,0)
+            ];
+        })
+        ->editColumn('amount', function ($query){
+            return [
+                'val' => number_format($query->total_value,0)
             ];
         })
         ->toJson();
@@ -406,14 +411,14 @@ class ReportsController extends Controller
         $whsCode = 0;
         if(isset($req->whsid) && $req->whsid != 0){
             $whsCode = $req->whsid;
-            $materials = DB::table('v_material_movements')
+            $materials = DB::table('v_material_movements_2')
                         ->where('whscode', $req->whsid)
                         // ->where('material', 'Bar Chainsaw')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
         }else{
-            $materials = DB::table('v_material_movements')
+            $materials = DB::table('v_material_movements_2')
                         // ->where('material', 'Bar Chainsaw')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
@@ -477,6 +482,7 @@ class ReportsController extends Controller
                                 'whscode'   => $mrow->whscode,
                                 'whsname'   => $mrow->whsname,
                                 'unit'      => $mrow->unit,
+                                'avg_price' => $row->avg_price,
                             );
                             array_push($stocks, $data);
                         }
@@ -499,6 +505,7 @@ class ReportsController extends Controller
                     'whscode'   => $row->whscode,
                     'whsname'   => $row->whsname,
                     'unit'      => $row->unit,
+                    'avg_price' => $row->avg_price,
                 );
                 array_push($stocks, $data);
             }
@@ -523,6 +530,11 @@ class ReportsController extends Controller
         ->editColumn('end_qty', function ($stocks){
             return [
                 'end' => number_format($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'],0)
+            ];
+        })
+        ->editColumn('amount', function ($stocks){
+            return [
+                'value' => number_format(($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'])*$stocks['avg_price'],0)
             ];
         })
         // ->orderColumn('whscode', '-whscode $1')

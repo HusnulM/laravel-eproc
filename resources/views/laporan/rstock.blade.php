@@ -48,6 +48,7 @@
                                     <th>Warehouse</th>
                                     <th>Quantity</th>
                                     <th>Unit</th>
+                                    <th>Total Value</th>
                                 </thead>
                                 <tbody>
 
@@ -126,7 +127,13 @@
                         },
                         "className": "text-right",
                     },
-                    {data: "unit"}
+                    {data: "unit"},
+                    {data: null, "sortable": false,
+                        render: function (data, type, row){
+                            return ``+ row.amount.val + ``;
+                        },
+                        "className": "text-right",
+                    },
                 ]
             });
         }
