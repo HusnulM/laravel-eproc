@@ -178,16 +178,6 @@
                                             <tbody id="tbl-pbj-body">
 
                                             </tbody>
-                                            <!-- <tfoot>
-                                                <tr>
-                                                    <td colspan="7"></td>
-                                                    <td style="text-align:right;">
-                                                        <button type="button" class="btn btn-success btn-sm btn-add-pbj-item">
-                                                            <i class="fa fa-plus"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tfoot> -->
                                         </table>
                                     </div>
                                 </div>
@@ -350,101 +340,6 @@
             loadMaterial();
             $('#modal-add-material').modal('show');
         });
-
-        // $('.btn-add-pbj-item').on('click', function(){
-        //     fCount = fCount + 1;
-        //     $('#tbl-pbj-body').append(`
-        //         <tr>
-        //             <td>
-        //                 <select name="parts[]" id="find-part`+fCount+`" class="form-control"></select>
-        //             </td>
-        //             <td>
-        //                 <input type="text" name="partdesc[]" id="partdesc`+fCount+`" class="form-control" readonly>
-        //             </td>
-        //             <td>
-        //                 <input type="text" name="quantity[]" class="form-control" onkeypress="`+validate(event)+`" required>
-        //             </td>
-        //             <td>
-        //                 <input type="text" name="uoms[]" id="partunit`+fCount+`" class="form-control">
-        //             </td>
-        //             <td>
-        //                 <input type="text" name="figures[]" class="form-control" required>
-        //             </td>
-        //             <td>
-        //                 <input type="text" name="remarks[]" class="form-control" required>
-        //             </td>
-        //             <td>
-        //                 <button type="button" class="btn btn-danger btnRemove">
-        //                     <i class="fa fa-trash"></i>
-        //                 </button>
-        //             </td>
-        //         </tr>
-        //     `);
-
-        //     $('.btnRemove').on('click', function(e){
-        //         e.preventDefault();
-        //         $(this).closest("tr").remove();
-        //     });
-
-        //     $(document).on('select2:open', (event) => {
-        //         const searchField = document.querySelector(
-        //             `.select2-search__field`,
-        //         );
-        //         if (searchField) {
-        //             searchField.focus();
-        //         }
-        //     });
-
-        //     $('#find-part'+fCount).select2({
-        //         placeholder: 'Type Part Number',
-        //         width: '100%',
-        //         minimumInputLength: 0,
-        //         ajax: {
-        //             url: base_url + '/master/item/findpartnumber',
-        //             dataType: 'json',
-        //             delay: 250,
-        //             method: 'POST',
-        //             headers: {
-        //                 'X-CSRF-TOKEN': _token
-        //             },
-        //             data: function (params) {
-        //                 var query = {
-        //                     search: params.term,
-        //                     // custname: $('#find-customer').val()
-        //                 }
-        //                 return query;
-        //             },
-        //             processResults: function (data) {
-        //                 // return {
-        //                 //     results: response
-        //                 // };
-        //                 console.log(data)
-        //                 return {
-        //                     results: $.map(data.data, function (item) {
-        //                         return {
-        //                             text: item.material + ' - ' +item.matdesc,
-        //                             slug: item.partnumber,
-        //                             id: item.material,
-        //                             ...item
-        //                         }
-        //                     })
-        //                 };
-        //             },
-        //             cache: true
-        //         }
-        //     });
-
-        //     $('#find-part'+fCount).on('change', function(){
-        //         // alert(this.value)
-
-        //         var data = $('#find-part'+fCount).select2('data')
-        //         console.log(data);
-
-        //         // alert(data[0].material);
-        //         $('#partdesc'+fCount).val(data[0].partname);
-        //         $('#partunit'+fCount).val(data[0].matunit);
-        //     });
-        // });
 
         $(document).on('select2:open', (event) => {
             const searchField = document.querySelector(

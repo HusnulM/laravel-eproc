@@ -16,18 +16,18 @@
                     <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                         <i class="fas fa-minus"></i>
                     </button> -->
-                    <a href="/excel/Template Upload Kendaraan.xlsx" target="_blank" class="btn btn-primary btn-sm"> 
+                    <a href="/excel/Template Initial Stock.xlsx" target="_blank" class="btn btn-primary btn-sm">
                         <i class="fa fa-download"></i> Download Template
                     </a>
 
-                    <a href="/master/player" class="btn btn-primary btn-sm"> 
+                    <a href="/master/player" class="btn btn-primary btn-sm">
                         <i class="fa fa-arrow-left"></i> Back
                     </a>
                 </div>
             </div>
             <div class="card-body">
-                
-                    
+
+
                 <div class="row">
                     <div class="col-lg-12">
                         <form action="{{ url('/inbal/stock') }}" method="POST" enctype="multipart/form-data">
@@ -62,16 +62,16 @@
                 </div>
             </div>
             <div class="card-footer">
-                
+
             </div>
         </div>
     </div>
 </div>
-</div>    
+</div>
 @endsection
 
 @section('additional-js')
 <script>
-    
+
 </script>
 @endsection

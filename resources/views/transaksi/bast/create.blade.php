@@ -17,7 +17,8 @@
 
 @section('content')
 <div class="container-fluid">
-    <form action="{{ url('logistic/bast/save') }}" method="post" enctype="multipart/form-data">
+    {{-- action="{{ url('logistic/bast/save') }}" --}}
+    <form id="form-bast-data" method="post" enctype="multipart/form-data">
         @csrf
         <div class="row">
             <div class="col-lg-12">
@@ -25,7 +26,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Create BAST</h3>
                         <div class="card-tools">
-                            <button type="submit" class="btn btn-primary btn-sm btn-add-dept">
+                            <button type="submit" class="btn btn-primary btn-sm btn-submit">
                                 <i class="fas fa-save"></i> Save BAST
                             </button>
                             <a href="{{ url('/logistic/bast') }}" class="btn btn-default btn-sm">
@@ -245,6 +246,45 @@
 
             var data = $('#find-penerima').select2('data')
             console.log(data);
+        });
+
+        $('#form-bast-data').on('submit', function(event){
+            // logistic/bast/save
+            event.preventDefault();
+
+            var formData = new FormData(this);
+            console.log($(this).serialize());
+            $.ajax({
+                url:base_url+'/logistic/bast/save',
+                method:'post',
+                data:formData,
+                dataType:'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend:function(){
+                    $('.btn-submit').attr('disabled',true);
+                },
+                success:function(data)
+                {
+                    console.log(data);
+                },
+                error:function(err){
+                    showErrorMessage(JSON.stringify(err))
+                }
+            }).done(function(result){
+                if(result.msgtype === "200"){
+                    toastr.success(result.message);
+                    $(".btn-submit").attr("disabled", false);
+
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }else if(result.msgtype === "400"){
+                    toastr.error(result.message)
+                    $(".btn-submit").attr("disabled", false);
+                }
+            });
         });
     });
 </script>
