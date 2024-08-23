@@ -128,9 +128,9 @@
                         "className": "text-right",
                     },
                     {data: "unit"},
-                    {data: null, "sortable": false,
+                    {data: "total_value", "sortable": false,
                         render: function (data, type, row){
-                            return ``+ row.amount.val + ``;
+                            return ``+ row.total_value.val + ``;
                         },
                         "className": "text-right",
                     },

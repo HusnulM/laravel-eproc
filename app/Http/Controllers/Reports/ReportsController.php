@@ -328,7 +328,7 @@ class ReportsController extends Controller
                 'qty1' => number_format($query->quantity,0)
             ];
         })
-        ->editColumn('amount', function ($query){
+        ->editColumn('total_value', function ($query){
             return [
                 'val' => number_format($query->total_value,0)
             ];
