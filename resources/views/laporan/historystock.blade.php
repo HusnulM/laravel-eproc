@@ -39,7 +39,11 @@
                                         <label for="">End Date</label>
                                         <input type="date" class="form-control" name="dateto" id="dateto" value="{{ $_GET['dateto'] ?? date('Y-m-d') }}" required>
                                     </div>
-                                    <div class="col-lg-6" style="text-align:right;">
+                                    <div class="col-lg-2">
+                                        <label for="">Total Value</label>
+                                        <h3 id="totalValue">0</h3>
+                                    </div>
+                                    <div class="col-lg-4" style="text-align:right;">
                                         <button type="button" class="btn btn-default mt-2 btn-search">
                                             <i class="fa fa-search"></i> Filter
                                         </button>
@@ -167,6 +171,7 @@
         $('.btn-search').on('click', function(){
             var param = '?whsid='+$('#Warehouse').val()+'&datefrom='+ $('#datefrom').val() +'&dateto='+ $('#dateto').val();
             loadDocument(param);
+            getTotalValue(param);
         });
 
         // loadDocument('');
@@ -330,6 +335,30 @@
             });
         }
 
+        function getTotalValue(_params){
+            // stockhistorylistval
+            $.ajax({
+                url:base_url+'/report/stockhistorylistval'+_params,
+                // method:'post',
+                // data:formData,
+                dataType:'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend:function(){
+                    // $('.btn-update-pr').attr('disabled','disabled');
+                    // showBasicMessage();
+                },
+                success:function(data)
+                {
+                },
+                error:function(error){
+                }
+            }).done(function(result){
+                // alert(result);
+                $('#totalValue').html(formatRupiah(result,''));
+            });
+        }
 
         $('.inputNumber').on('change', function(){
             this.value = formatRupiah(this.value,'');

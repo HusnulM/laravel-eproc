@@ -9,6 +9,8 @@ use Validator,Redirect,Response;
 
 class ReportsController extends Controller
 {
+    private $totalMaterialValue = 0;
+
     public function requestbudget(){
         $department = DB::table('t_department')->get();
         return view('laporan.requestbudget', ['department' => $department]);
@@ -406,6 +408,12 @@ class ReportsController extends Controller
         return view('laporan.historystock', ['warehouse' => $warehouse]);
     }
 
+    public function getTotalValue(Request $req)
+    {
+        $data = $this->getHistoryStock($req);
+        return $this->totalMaterialValue;
+    }
+
     public function getHistoryStock(Request $req)
     {
         $whsCode = 0;
@@ -413,13 +421,11 @@ class ReportsController extends Controller
             $whsCode = $req->whsid;
             $materials = DB::table('v_material_movements_2')
                         ->where('whscode', $req->whsid)
-                        // ->where('material', 'Bar Chainsaw')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
         }else{
             $materials = DB::table('v_material_movements_2')
-                        // ->where('material', 'Bar Chainsaw')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
@@ -447,8 +453,6 @@ class ReportsController extends Controller
             "'. $endDate .'",
             "'. $whsCode .'")');
 
-        // return $query;
-
         $mtMat = array();
         foreach ($query as $sg) {
             $mtMat[] = $sg->material;
@@ -461,7 +465,6 @@ class ReportsController extends Controller
 
         $stocks = array();
         foreach($materials as $key => $row){
-            // $bQty = 0;
             if(in_array($row->material, $mtMat)){
                 if(in_array($row->whscode, $ftWhs)){
                     foreach($query as $mat => $mrow){
@@ -477,8 +480,8 @@ class ReportsController extends Controller
                                 'material'  => $row->material,
                                 'matdesc'   => $row->matdesc,
                                 'begin_qty' => $bQty,
-                                'qty_in'    => $mrow->qty_in,
-                                'qty_out'   => $mrow->qty_out,
+                                'qty_in'    => (int)$mrow->qty_in,
+                                'qty_out'   => (int)$mrow->qty_out,
                                 'whscode'   => $mrow->whscode,
                                 'whsname'   => $mrow->whsname,
                                 'unit'      => $mrow->unit,
@@ -500,8 +503,8 @@ class ReportsController extends Controller
                     'material'  => $row->material,
                     'matdesc'   => $row->matdesc,
                     'begin_qty' => $bQty,
-                    'qty_in'    => 0,
-                    'qty_out'   => 0,
+                    'qty_in'    => (int)0,
+                    'qty_out'   => (int)0,
                     'whscode'   => $row->whscode,
                     'whsname'   => $row->whsname,
                     'unit'      => $row->unit,
@@ -511,10 +514,20 @@ class ReportsController extends Controller
             }
         }
 
-        // return $stocks;
         $stocks = collect($stocks)->sortBy('whscode')->values();
         // return $stocks;
+        $totalValue = 0;
+        foreach($stocks as $data => $val){
+            // return $val['begin_qty'];
+            $totalValue = $totalValue + (($val['begin_qty']+$val['qty_in']+$val['qty_out'])*$val['avg_price']);
+        }
 
+        $this->totalMaterialValue = $totalValue;
+        // if($total === 'X'){
+        //     return $totalValue;
+        // }
+
+        // $amount = 'A';
         return Datatables::of($stocks)
         ->addIndexColumn()
         ->editColumn('qty_in', function ($stocks){
@@ -538,15 +551,16 @@ class ReportsController extends Controller
             ];
         })
         ->editColumn('amount2', function ($stocks){
+            // $aaa = $amount;
             return [
-                'value' => ($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'])*$stocks['avg_price']
+                'value' => ($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'])*$stocks['avg_price'],
+                // 'total_value' => $aaa
             ];
         })
-        // ->orderColumn('whscode', '-whscode $1')
-        // ->orderColumn('material', '-material $1')
         ->make(true);
-
     }
+
+
 
     public function stockhistorydetails(Request $req)
     {
