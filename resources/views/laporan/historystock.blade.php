@@ -57,6 +57,7 @@
                             <table id="tbl-budget-list" class="table table-bordered table-hover table-striped table-sm" style="width:100%;">
                                 <thead>
                                     <th>No</th>
+                                    <th style="width:4%;">View Details</th>
                                     <th>Part Number</th>
                                     <th>Description</th>
                                     <th>Warehouse</th>
@@ -66,7 +67,6 @@
                                     <th>End Qty</th>
                                     <th>Unit</th>
                                     <th>Total Value</th>
-                                    <th></th>
                                 </thead>
                                 <tbody>
 
@@ -141,6 +141,7 @@
 @endsection
 
 @section('additional-js')
+<script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script>
     function validate(evt) {
         var theEvent = evt || window.event;
@@ -194,6 +195,12 @@
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }
                     },
+                    {"defaultContent":
+                        `
+                         <button class='btn btn-primary btn-sm button-detail'> <i class='fa fa-search'></i> View Detail</button>
+                        `,
+                        "className": "text-center"
+                    },
                     {data: "material", className: 'uid'},
                     {data: "matdesc", className: 'uid'},
                     {data: "whsname", className: 'uid'},
@@ -225,14 +232,35 @@
                             return ``+ row.amount.value + ``;
                         },
                         "className": "text-right"
-                    },
-                    {"defaultContent":
-                        `
-                         <button class='btn btn-primary btn-sm button-detail'> <i class='fa fa-search'></i> View Detail</button>
-                        `,
-                        "className": "text-center"
                     }
-                ]
+                ],
+                order: [[1, 'asc']],
+                rowGroup: {
+                    startRender: null,
+                    endRender: function ( rows, group ) {
+                        var data  = [];
+                        var rdata = [];
+                        rdata = rows.data()
+                        data  = rows.data()[rdata.length-1];
+
+                        console.log(rdata);
+                        var totalPrice = 0;
+                        var amount  = 0;
+                        for(var i = 0; i < rdata.length; i++){
+                            // console.log(rdata[i].total_cost.totalprice2)
+                            amount = rdata[i].amount2.value;
+
+                            totalPrice = parseInt(totalPrice) + parseInt(amount);
+                        }
+
+                        return $('<tr>')
+                            .append( '<td colspan="10" align="right"><b>Total Value</b></td>' )
+                            .append( '<td style="text-align:right;"><b>'+ formatRupiah(totalPrice,'') +'</b></td>' )
+
+                            .append( '</tr>' );
+                    },
+                    dataSrc: 1
+                }
             });
 
             $('#tbl-budget-list tbody').on( 'click', '.button-detail', function () {
@@ -300,15 +328,6 @@
                 var table = $('#tbl-matmove-list').DataTable();
                 table.columns.adjust().draw();
             });
-
-            // let table = new DataTable('#tbl-budget-list');
-
-            // table.on('click', 'tbody tr', function () {
-            //     let data = table.row(this).data();
-            //     console.log(data);
-
-            //     // alert('You clicked on ' + data[0] + "'s row");
-            // });
         }
 
 

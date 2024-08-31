@@ -15,7 +15,7 @@
     </style>
 @endsection
 
-@section('content')        
+@section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -45,7 +45,7 @@
                                         <label for="">-</label>
                                         <input type="date" class="form-control" name="dateto" id="dateto" value="{{ $_GET['dateto'] ?? '' }}">
                                     </div>
-                                    
+
                                     {{-- <div class="col-lg-2 col-md-6 col-sm-12">
                                         <label for="">Mekanik</label>
                                         <select name="mekanik" id="mekanik" class="form-control">
@@ -65,13 +65,13 @@
 
                                     <div class="col-lg-3 col-md-6 col-sm-12" style="text-align:center;">
                                         <br>
-                                        <button type="button" class="btn btn-default mt-2 btn-search"> 
+                                        <button type="button" class="btn btn-default mt-2 btn-search">
                                             <i class="fa fa-search"></i> Filter
                                         </button>
-                                        <button type="button" class="btn btn-default mt-2 btn-reset-filter"> 
+                                        <button type="button" class="btn btn-default mt-2 btn-reset-filter">
                                             <i class="fa fa-refresh"></i> Reset Filter
                                         </button>
-                                        <button type="submit" class="btn btn-success mt-2 btn-export"> 
+                                        <button type="submit" class="btn btn-success mt-2 btn-export">
                                             <i class="fa fa-download"></i> Export Data
                                         </button>
                                     </div>
@@ -91,7 +91,7 @@
                                     <th>Total Cost</th>
                                 </thead>
                                 <tbody>
-        
+
                                 </tbody>
                             </table>
                         </div>
@@ -178,16 +178,16 @@
                     { "data": null,"sortable": false, "searchable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
+                        }
                     },
                     {data: "no_plat", className: 'uid'},
-                    {data: "type_model", className: 'uid'},                    
+                    {data: "type_model", className: 'uid'},
                     {data: "postdate", className: 'uid',
                         render: function (data, type, row){
                             return ``+ row.postdate.postdate1 + ``;
                         }
-                    },          
-                    {data: "total_cost", "sortable": false, 
+                    },
+                    {data: "total_cost", "sortable": false,
                         render: function (data, type, row){
                             return ``+ row.total_cost.totalprice + ``;
                         },
@@ -214,7 +214,7 @@
                         return $('<tr>')
                             .append( '<td colspan="4" align="right"><b>Total Cost</b></td>' )
                             .append( '<td style="text-align:right;"><b>'+ formatRupiah(totalPrice,'') +'</b></td>' )
-                            
+
                             .append( '</tr>' );
                     },
                     dataSrc: 1
@@ -224,7 +224,7 @@
                 // }
             });
         }
-        
+
 
         $('.inputNumber').on('change', function(){
             this.value = formatRupiah(this.value,'');
@@ -239,7 +239,7 @@
             }
         });
 
-        $('#find-licenseNumber').select2({ 
+        $('#find-licenseNumber').select2({
             placeholder: 'No Kendaraan',
             width: '100%',
             minimumInputLength: 0,
@@ -285,14 +285,14 @@
             sisa     		  = split[0].length % 3,
             rupiah     		  = split[0].substr(0, sisa),
             ribuan     		  = split[0].substr(sisa).match(/\d{3}/gi);
-        
+
             if(ribuan){
                 separator = sisa ? ',' : '';
                 rupiah += separator + ribuan.join(',');
             }
-        
+
             rupiah = split[1] != undefined ? rupiah + '.' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');            
+            return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
         }
     });
 </script>

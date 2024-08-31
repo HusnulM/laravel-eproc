@@ -19,7 +19,7 @@ class StockExport implements FromCollection, WithHeadings, WithMapping
     */
     public function collection()
     {
-        $query = DB::table('v_inv_summary_stock');
+        $query = DB::table('v_inv_summary_stock_withvalue');
 
         $query->orderBy('material','asc');
         $query->orderBy('whsid','asc');
@@ -33,6 +33,7 @@ class StockExport implements FromCollection, WithHeadings, WithMapping
             $row->whsname,
             $row->quantity,
             $row->unit,
+            $row->total_value
         ];
 
         return $fields;
@@ -46,6 +47,7 @@ class StockExport implements FromCollection, WithHeadings, WithMapping
                 "Warehouse",
                 "Quantity",
                 "Unit",
+                "Total Value"
         ];
     }
 }

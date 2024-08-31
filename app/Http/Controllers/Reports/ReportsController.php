@@ -537,6 +537,11 @@ class ReportsController extends Controller
                 'value' => number_format(($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'])*$stocks['avg_price'],0)
             ];
         })
+        ->editColumn('amount2', function ($stocks){
+            return [
+                'value' => ($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'])*$stocks['avg_price']
+            ];
+        })
         // ->orderColumn('whscode', '-whscode $1')
         // ->orderColumn('material', '-material $1')
         ->make(true);

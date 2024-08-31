@@ -23,13 +23,13 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping
         $whsCode = 0;
         if($req['Warehouse'] != 0){
             // $whsCode = $req['Warehouse'];
-            $materials = DB::table('v_material_movements')
+            $materials = DB::table('v_material_movements_2')
                         ->where('whscode', $req['Warehouse'])
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
         }else{
-            $materials = DB::table('v_material_movements')
+            $materials = DB::table('v_material_movements_2')
                         ->orderBy('whscode', 'ASC')
                         ->orderBy('material', 'ASC')
                         ->get();
@@ -89,6 +89,7 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping
                                 'whscode'   => $mrow->whscode,
                                 'whsname'   => $mrow->whsname,
                                 'unit'      => $mrow->unit,
+                                'avg_price' => $row->avg_price,
                             );
                             array_push($stocks, $data);
                         }
@@ -111,6 +112,7 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping
                     'whscode'   => $row->whscode,
                     'whsname'   => $row->whsname,
                     'unit'      => $row->unit,
+                    'avg_price' => $row->avg_price,
                 );
                 array_push($stocks, $data);
             }
@@ -131,6 +133,7 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping
             $row['qty_out'],
             $row['begin_qty'] + $row['qty_in'] - $row['qty_out'],
             $row['unit'],
+            ( $row['begin_qty'] + $row['qty_in'] - $row['qty_out'] ) * $row['avg_price'],
         ];
 
         return $fields;
@@ -147,6 +150,7 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping
                 "OUT",
                 "End Qty",
                 "Unit",
+                "Total Value"
         ];
     }
 }
