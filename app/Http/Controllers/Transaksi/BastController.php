@@ -132,7 +132,7 @@ class BastController extends Controller
                 $qty    = 0;
                 $qty    = $quantity[$i];
                 $qty    = str_replace(',','',$qty);
-
+                $inputQty = $qty;
                 $qty = (int)$qty;
 
                 $warehouseID = 0;
@@ -155,7 +155,7 @@ class BastController extends Controller
                                    ->where('whsid',    $warehouseID)->first();
 
                     if($latestStock){
-                        if((int)$latestStock->quantity < (int)$qty){
+                        if((int)$latestStock->quantity < (int)$inputQty){
                             DB::rollBack();
                             $result = array(
                                 'msgtype' => '400',
@@ -197,7 +197,7 @@ class BastController extends Controller
                                    ->where('whsid',    $pbjdtl->whscode)->first();
                     //dd((int)($latestStock->quantity));
                     if($latestStock){
-                        if((int)$latestStock->quantity < (int)$qty){
+                        if((int)$latestStock->quantity < (int)$inputQty){
                             DB::rollBack();
                             $result = array(
                                 'msgtype' => '400',
