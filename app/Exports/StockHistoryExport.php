@@ -131,7 +131,7 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping
             $row['begin_qty'],
             $row['qty_in'],
             $row['qty_out'],
-            $row['begin_qty'] + $row['qty_in'] - $row['qty_out'],
+            $row['begin_qty'] + $row['qty_in'] + $row['qty_out'],
             $row['unit'],
             ( $row['begin_qty'] + $row['qty_in'] - $row['qty_out'] ) * $row['avg_price'],
         ];
