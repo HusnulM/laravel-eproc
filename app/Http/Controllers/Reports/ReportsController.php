@@ -411,7 +411,11 @@ class ReportsController extends Controller
     public function getTotalValue(Request $req)
     {
         $data = $this->getHistoryStock($req);
-        return $this->totalMaterialValue;
+        $result = array(
+            'msgtype'  => '200',
+            'totalval' => $this->totalMaterialValue
+        );
+        return $result;
     }
 
     public function getHistoryStock(Request $req)
@@ -442,7 +446,8 @@ class ReportsController extends Controller
         }
 
         $beginQty = DB::table('v_inv_movement')
-                    ->select(DB::raw('material'), DB::raw('whscode'), DB::raw('sum(quantity) as begin_qty'))
+                    ->select(DB::raw('material'), DB::raw('whscode'), DB::raw('sum(quantity) as begin_qty'),
+                             DB::raw('sum(amount_val) as begin_val'))
                     ->where('postdate', '<', $strDate)
 
                     ->groupBy(DB::raw('material'), DB::raw('whscode'))
@@ -470,9 +475,11 @@ class ReportsController extends Controller
                     foreach($query as $mat => $mrow){
                         if($row->material == $mrow->material && $row->whscode == $mrow->whscode){
                             $bQty = 0;
+                            $bVal = 0;
                             foreach($beginQty as $bqty => $mtqy){
                                 if($mtqy->material == $mrow->material && $mtqy->whscode == $mrow->whscode){
                                     $bQty = $bQty + $mtqy->begin_qty;
+                                    $bVal = $bVal + $mtqy->begin_val;
                                 }
                             }
                             $data = array(
@@ -482,6 +489,9 @@ class ReportsController extends Controller
                                 'begin_qty' => $bQty,
                                 'qty_in'    => (int)$mrow->qty_in,
                                 'qty_out'   => (int)$mrow->qty_out,
+                                'begin_val' => $bVal,
+                                'val_in'    => (int)$mrow->val_in,
+                                'val_out'   => (int)$mrow->val_out,
                                 'whscode'   => $mrow->whscode,
                                 'whsname'   => $mrow->whsname,
                                 'unit'      => $mrow->unit,
@@ -493,9 +503,11 @@ class ReportsController extends Controller
                 }
             }else{
                 $bQty = 0;
+                $bVal = 0;
                 foreach($beginQty as $bqty => $mtqy){
                     if($mtqy->material == $row->material && $mtqy->whscode == $row->whscode){
                         $bQty = $bQty + $mtqy->begin_qty;
+                        $bVal = $bVal + $mtqy->begin_val;
                     }
                 }
                 $data = array(
@@ -505,6 +517,9 @@ class ReportsController extends Controller
                     'begin_qty' => $bQty,
                     'qty_in'    => (int)0,
                     'qty_out'   => (int)0,
+                    'begin_val' => $bVal,
+                    'val_in'    => (int)0,
+                    'val_out'   => (int)0,
                     'whscode'   => $row->whscode,
                     'whsname'   => $row->whsname,
                     'unit'      => $row->unit,
@@ -519,15 +534,12 @@ class ReportsController extends Controller
         $totalValue = 0;
         foreach($stocks as $data => $val){
             // return $val['begin_qty'];
-            $totalValue = $totalValue + (($val['begin_qty']+$val['qty_in']+$val['qty_out'])*$val['avg_price']);
+            // $totalValue = $totalValue + (($val['begin_qty']+$val['qty_in']+$val['qty_out'])*$val['avg_price']);
+            $totalValue = $totalValue + (($val['begin_val']+$val['val_in']+$val['val_out']));
         }
 
-        $this->totalMaterialValue = $totalValue;
-        // if($total === 'X'){
-        //     return $totalValue;
-        // }
+        $this->totalMaterialValue = number_format($totalValue, 0);
 
-        // $amount = 'A';
         return Datatables::of($stocks)
         ->addIndexColumn()
         ->editColumn('qty_in', function ($stocks){
@@ -551,10 +563,33 @@ class ReportsController extends Controller
             ];
         })
         ->editColumn('amount2', function ($stocks){
-            // $aaa = $amount;
             return [
                 'value' => ($stocks['begin_qty']+$stocks['qty_in']+$stocks['qty_out'])*$stocks['avg_price'],
-                // 'total_value' => $aaa
+            ];
+        })
+        ->editColumn('begin_val', function ($stocks){
+            return [
+                'begin' => number_format($stocks['begin_val'],0)
+            ];
+        })
+        ->editColumn('val_in', function ($stocks){
+            return [
+                'in' => number_format($stocks['val_in'],0)
+            ];
+        })
+        ->editColumn('val_out', function ($stocks){
+            return [
+                'out' => number_format($stocks['val_out']*-1,0)
+            ];
+        })
+        ->editColumn('end_val', function ($stocks){
+            return [
+                'value' => number_format($stocks['begin_val']+$stocks['val_in']+$stocks['val_out'],0)
+            ];
+        })
+        ->editColumn('end_val2', function ($stocks){
+            return [
+                'value' => $stocks['begin_val']+$stocks['val_in']+$stocks['val_out']
             ];
         })
         ->make(true);

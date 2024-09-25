@@ -70,7 +70,10 @@
                                     <th>OUT</th>
                                     <th>End Qty</th>
                                     <th>Unit</th>
-                                    <th>Total Value</th>
+                                    <th>Begin Value</th>
+                                    <th>In Value</th>
+                                    <th>Out Value</th>
+                                    <th>Ending Value</th>
                                 </thead>
                                 <tbody>
 
@@ -224,17 +227,33 @@
                     },
                     {data: null, className: 'uid',
                         render: function (data, type, row, meta) {
-                            // console.log(row)
                             return ``+ row.end_qty.end + ``;
-                            // return (Number(row.begin_qty)) + (Number(row.qty_in.in)) - (Number(row.qty_out.out));
                         },
                         "className": "text-right"
                     },
                     {data: "unit"},
+                    {data: null, "sortable": false,
+                        render: function (data, type, row){
+                            return ``+ row.begin_val.begin + ``;
+                        },
+                        "className": "text-right",
+                    },
+                    {data: "val_in", "sortable": false,
+                        render: function (data, type, row){
+                            return ``+ row.val_in.in + ``;
+                        },
+                        "className": "text-right",
+                    },
+                    {data: "val_out", "sortable": false,
+                        render: function (data, type, row){
+                            return ``+ row.val_out.out + ``;
+                        },
+                        "className": "text-right",
+                    },
                     {data: null, className: 'uid',
                         render: function (data, type, row, meta) {
                             // console.log(row)
-                            return ``+ row.amount.value + ``;
+                            return ``+ row.end_val.value + ``;
                         },
                         "className": "text-right"
                     }
@@ -252,14 +271,14 @@
                         var totalPrice = 0;
                         var amount  = 0;
                         for(var i = 0; i < rdata.length; i++){
-                            // console.log(rdata[i].total_cost.totalprice2)
-                            amount = rdata[i].amount2.value;
-
+                            amount = rdata[i].end_val2.value;
                             totalPrice = parseInt(totalPrice) + parseInt(amount);
                         }
 
+                        // $('#totalValue').html(formatRupiah(totalPrice,''));
+
                         return $('<tr>')
-                            .append( '<td colspan="10" align="right"><b>Total Value</b></td>' )
+                            .append( '<td colspan="13" align="right"><b>Total Value</b></td>' )
                             .append( '<td style="text-align:right;"><b>'+ formatRupiah(totalPrice,'') +'</b></td>' )
 
                             .append( '</tr>' );
@@ -303,11 +322,6 @@
                     scrollCollapse: true,
                     bDestroy: true,
                     columns: [
-                        // { "data": null,"sortable": false, "searchable": false,
-                        //     render: function (data, type, row, meta) {
-                        //         return meta.row + meta.settings._iDisplayStart + 1;
-                        //     }
-                        // },
                         {data: "docnum", className: 'uid'},
                         {data: "docyear", className: 'uid'},
                         {data: "postdate", className: 'uid'},
@@ -353,10 +367,12 @@
                 {
                 },
                 error:function(error){
+                    console.log(error)
                 }
             }).done(function(result){
                 // alert(result);
-                $('#totalValue').html(formatRupiah(result,''));
+                // $('#totalValue').html(formatRupiah(result,''));
+                $('#totalValue').html(result.totalval);
             });
         }
 

@@ -2,6 +2,16 @@
 
 use Illuminate\Support\Facades\DB;
 
+$totalBaris = 0;
+
+function setExcelRows($row){
+    $totalBaris = $row;
+    return $totalBaris;
+}
+
+function getExcelRows(){
+    return $totalBaris;
+}
 
 function userMenu(){
     $mnGroups = DB::table('v_usermenus')
