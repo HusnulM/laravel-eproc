@@ -177,7 +177,7 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping, S
             number_format($row['begin_val'], 0, '.', ''),
             number_format($row['val_in'], 0, '.', ''),
             number_format($row['val_out'], 0, '.', ''),
-            number_format($row['begin_val'] + $row['val_in'] - $row['val_out'], 0, '.', '')
+            number_format($row['begin_val'] + $row['val_in'] + $row['val_out'], 0, '.', '')
         ];
 
         return $fields;
