@@ -233,7 +233,6 @@ class StockHistoryExport implements FromCollection, WithHeadings, WithMapping, S
 
         $event->sheet->mergeCells('A'.$highestRow.':K'.$highestRow);
 
-
         $cellRange = 'A'.$highestRow.':K'.$highestRow;
         $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(11);
         $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true);
