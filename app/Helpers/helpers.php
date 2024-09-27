@@ -1203,12 +1203,18 @@ function sendPurchaseOrder($poNumber){
     $apikey  = 'B807C072-05ADCCE0-C1C82376-3EC92EF1';
     $url     = 'https://mahakaryabangunpersada.com/api/v1/submit/po';
     $get_api = mbpAPI($url, $apikey, $sendData);
+    // return $get_api;
+    // return str_replace($apikey,"",$get_api);
+    // $response = json_decode($get_api, true);
+    $response = json_decode(str_replace($apikey,"",$get_api));
+    // return $response->status;
+    // $status   = $response['status'];
+    // $pesan    = $response['status_message'];
+    // $datajson = $response['data'];
 
-    $response = json_decode($get_api, true);
-    // return $response;
-    $status   = $response['status'];
-    $pesan    = $response['status_message'];
-    $datajson = $response['data'];
+    $status   = $response->status;
+    $pesan    = $response->status_message;
+    $datajson = $response->data;
     if(str_contains($datajson,'Succeed')){
         insertOrUpdate($insertData,'t_log_submit_api');
         DB::table('t_po01')->where('ponum', $poNumber)->update([
