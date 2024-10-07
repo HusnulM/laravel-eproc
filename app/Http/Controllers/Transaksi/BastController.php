@@ -246,25 +246,7 @@ class BastController extends Controller
                 );
                 array_push($insertData, $data);
 
-                $pbjitem = DB::table('t_pbj02')
-                            ->where('pbjnumber', $pbjnum[$i])
-                            ->where('pbjitem', $pbjitm[$i])->first();
 
-                $relQty = $pbjitem->realized_qty + $qty;
-
-                if($relQty >= $pbjitem->quantity){
-                    DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
-                    ->update([
-                        'itemstatus'   => 'C',
-                        'bast_created' => 'Y',
-                        'realized_qty' => $relQty
-                    ]);
-                }else{
-                    DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
-                    ->update([
-                        'realized_qty' => $relQty
-                    ]);
-                }
 
                 $matdesc = str_replace('"','\"',$partdsc[$i]);
                 $matCode = str_replace('"','\"',$parts[$i]);
@@ -282,6 +264,25 @@ class BastController extends Controller
                     "'. $pbjnum[$i] .'",
                     "'. $pbjitm[$i] .'",
                     "'. Auth::user()->email .'")');
+
+                    $pbjitem = DB::table('t_pbj02')
+                    ->where('pbjnumber', $pbjnum[$i])
+                    ->where('pbjitem', $pbjitm[$i])->first();
+
+                    $relQty = $pbjitem->realized_qty + $qty;
+                    if((int)$relQty >= (int)$pbjitem->quantity){
+                        DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
+                        ->update([
+                            'itemstatus'   => 'C',
+                            'bast_created' => 'Y',
+                            'realized_qty' => $relQty
+                        ]);
+                    }else{
+                        DB::table('t_pbj02')->where('pbjnumber', $pbjnum[$i])->where('pbjitem', $pbjitm[$i])
+                        ->update([
+                            'realized_qty' => $relQty
+                        ]);
+                    }
             }
             insertOrUpdate($insertData,'t_bast02');
 
@@ -326,6 +327,8 @@ class BastController extends Controller
                         'bast_created' => 'Y'
                     ]);
             }
+
+
 
             DB::commit();
             $result = array(
