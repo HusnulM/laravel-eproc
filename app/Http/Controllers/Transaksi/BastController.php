@@ -88,6 +88,16 @@ class BastController extends Controller
         DB::beginTransaction();
         try{
 
+            $checkNoBAST = DB::table('t_bast01')
+                           ->where('no_bast',$req['nomorbast'])->first();
+            if($checkNoBAST){
+                $result = array(
+                    'msgtype' => '400',
+                    'message' => 'Nomor BAST '. $req['nomorbast'] . ' sudah ada'
+                );
+                return $result;
+            }
+
             $bastID = DB::table('t_bast01')->insertGetId([
                 'no_bast'         => $req['nomorbast'],
                 'userid_pemberi'  => Auth::user()->id,
@@ -333,7 +343,7 @@ class BastController extends Controller
             DB::commit();
             $result = array(
                 'msgtype' => '200',
-                'message' => 'BAST Berhasil disimpan '. $bastID
+                'message' => 'BAST Berhasil disimpan '. $bastID . ' ' . $req['nomorbast']
             );
             return $result;
             // return Redirect::to("/logistic/bast")->withSuccess('BAST Berhasil disimpan');
