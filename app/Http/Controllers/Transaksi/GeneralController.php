@@ -11,7 +11,7 @@ class GeneralController extends Controller
 {
     public function allMaterial(Request $request){
         $params      = $request->params;
-        $whereClause = $params['sac'];
+        // $whereClause = $params['sac'];
         $query       = DB::table('v_material')->orderBy('material');
         return DataTables::queryBuilder($query)->toJson();
     }

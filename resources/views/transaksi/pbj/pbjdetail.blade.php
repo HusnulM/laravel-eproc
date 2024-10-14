@@ -102,14 +102,14 @@
                                         <td><label>Engine S/N</label></td>
                                         <td>{{ $pbjhdr->engine_sn }}</td>
                                     </tr>
-                                    <tr>
+                                    {{-- <tr>
                                         <td><label>Cost Code</label></td>
                                         <td>{{ $pbjhdr->budget_cost_code }}</td>
                                     </tr>
                                     <tr>
                                         <td><label>Periode</label></td>
                                         <td>{{ $pbjhdr->periode }}</td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         <td><label>Project</label></td>
                                         <td>{{ $project->kode_project ?? '' }} - {{ $project->nama_project ?? '' }}</td>
@@ -183,6 +183,7 @@
                                                                 <th>Unit</th>
                                                                 <th>Figure</th>
                                                                 <th>Remark</th>
+                                                                <th>Kode Budget</th>
                                                             </thead>
                                                             <tbody>
                                                                 @foreach($pbjitem as $key => $row)
@@ -200,15 +201,10 @@
                                                                         <td style="text-align:right;">
                                                                             {{ number_format($row->quantity,3) }}
                                                                         </td>
-                                                                        <td>
-                                                                            {{ $row->unit }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $row->figure }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $row->remark }}
-                                                                        </td>
+                                                                        <td>{{ $row->unit }}</td>
+                                                                        <td>{{ $row->figure }}</td>
+                                                                        <td>{{ $row->remark }}</td>
+                                                                        <td>{{ $row->budget_code }}</td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>

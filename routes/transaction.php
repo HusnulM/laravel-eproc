@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => '/transaction/pbj'], function () {
         Route::get('/',                        'Transaksi\PbjController@index')->middleware('checkAuth:transaction/pbj');
         Route::post('/save',                   'Transaksi\PbjController@save');//->middleware('checkAuth:transaction/pbj');
-        Route::get('/list',                    'Transaksi\PbjController@list')->middleware('checkAuth:transaction/pbj/list');
+
         Route::get('/listpbj',                 'Transaksi\PbjController@listPBJ');//->middleware('checkAuth:transaction/pbj');
         Route::get('/detail/{p1}',             'Transaksi\PbjController@detailPBJ');//->middleware('checkAuth:transaction/pbj');
         Route::get('/budgetlist',              'Transaksi\PbjController@budgetLists');//->middleware('checkAuth:transaction/pbj');
@@ -42,12 +42,15 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/wo/detail/{p1}',      'Transaksi\PbjController@detailWO');//->middleware('checkAuth:transaction/pbj');
 
+        Route::get('/getrablist/{id}',                'Transaksi\PbjController@rabList')->middleware('checkAuth:transaction/pbj');
+
     });
 
+    Route::get('/transaction/list/pbj',                 'Transaksi\PbjController@list')->middleware('checkAuth:transaction/list/pbj');
     Route::post('/transaction/pbj/deleteitem',          'Transaksi\PbjController@deletePBJItem');
     Route::post('/transaction/pbj/udpate',              'Transaksi\PbjController@update');
 
-    Route::group(['prefix' => '/transaction/pbjtanpawo'], function () {
+    Route::group(['prefix' => '/transaction/nonwopbj'], function () {
         Route::get('/',          'Transaksi\PbjController@createWithoueWO');
         //->middleware('checkAuth:transaction/pbj');
     });

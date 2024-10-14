@@ -60,3 +60,5 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
 Route::get('/sendpotoapi',               'Transaksi\PurchaseOrderController@sendPO')->middleware('checkAuth:proc/po');
+
+Route::get('/getrablist/{id}',                'Transaksi\PbjController@rabList');

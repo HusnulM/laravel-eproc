@@ -43,7 +43,7 @@
 
                                         <div class="form-group">
                                             <label for="tglpbj">Tanggal PBJ</label>
-                                            <input type="date" name="tglpbj" class="form-control" required>
+                                            <input type="date" name="tglpbj" id="tglpbj" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-12">
@@ -143,7 +143,7 @@
                                             <input type="text" name="km" id="km" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-12">
+                                    <div class="col-lg-6 col-md-12" style="display: none;">
                                         <div class="form-group">
                                             <label for="budgetcode">Budget / Cost Code</label>
                                             {{-- <input type="text" name="budgetcode" class="form-control"> --}}
@@ -159,10 +159,10 @@
                                             <input type="text" name="no_rangka" id="no_rangka" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-12">
+                                    <div class="col-lg-6 col-md-12" style="display: none;">
                                         <div class="form-group">
                                             <label for="periode">Periode</label>
-                                            <select name="periode" class="form-control" required>
+                                            <select name="periode" class="form-control">
                                                 <option value="">---</option>
                                                 @foreach ($periode as $key => $row )
                                                 <option value="Januari {{ $row->pyear }}">Januari {{ $row->pyear }}</option>
@@ -216,25 +216,19 @@
                                                 {{-- <th>Warehouse</th> --}}
                                                 <th>Figure</th>
                                                 <th>Remark</th>
-                                                <th style="text-align:right;">
+                                                <th style="text-align:right; width:15%;">
                                                     <button type="button" class="btn btn-success btn-sm btn-add-pbj-item">
                                                         <i class="fa fa-plus"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-success btn-sm btn-add-pbj-rab">
+                                                        <i class="fa fa-plus"></i> List RAB
                                                     </button>
                                                 </th>
                                             </thead>
                                             <tbody id="tbl-pbj-body">
 
                                             </tbody>
-                                            <!-- <tfoot>
-                                                <tr>
-                                                    <td colspan="7"></td>
-                                                    <td style="text-align:right;">
-                                                        <button type="button" class="btn btn-success btn-sm btn-add-pbj-item">
-                                                            <i class="fa fa-plus"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tfoot> -->
+
                                         </table>
                                     </div>
                                 </div>
@@ -269,6 +263,40 @@
                             <th>Category</th>
                             <th>Available Quantity</th>
                             <th>Unit</th>
+                            <th></th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-rab">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Pilih Item RAB</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="tbl-rab-list" class="table table-bordered table-hover table-striped table-sm" style="width:100%;">
+                        <thead>
+                            <th>No</th>
+                            <th>Material</th>
+                            <th>Description</th>
+                            <th>Available Quantity</th>
+                            <th>Unit</th>
+                            <th>Kode Budget</th>
                             <th></th>
                         </thead>
                         <tbody></tbody>
@@ -319,6 +347,89 @@
         $('#btn-submit').on('click', function(){
             $('#is_draft').val('N');
         });
+
+        function loadRAB(pTglPbj){
+            $("#tbl-rab-list").DataTable({
+                serverSide: true,
+                ajax: {
+                    url: base_url+'/transaction/pbj/getrablist/'+pTglPbj,
+                    data: function (data) {
+                        data.params = {
+                            sac: "sac"
+                        }
+                    }
+                },
+                buttons: false,
+                columns: [
+                    { "data": null,"sortable": false, "searchable": false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {data: "material", className: 'uid'},
+                    {data: "matdesc", className: 'fname'},
+                    // {data: "mattypedesc", className: 'fname'},
+                    {data: "availableQty", "className": "text-right"},
+                    {data: "matunit", className: 'fname'},
+                    {data: "kodebudget", className: 'fname'},
+                    {"defaultContent":
+                        "<button type='button' class='btn btn-primary btn-sm button-add-rab'> <i class='fa fa-plus'></i> Add</button>"
+                    }
+                ],
+                "bDestroy": true,
+            });
+
+            $("#tbl-rab-list tbody").on('click', '.button-add-rab', function(){
+                var menuTable = $('#tbl-rab-list').DataTable();
+                selected_data = [];
+                selected_data = menuTable.row($(this).closest('tr')).data();
+
+                if(checkSelectedMaterial(selected_data.material)){
+                    console.log(selected_items);
+                }else{
+                    console.log(selected_data);
+                    selected_items.push(selected_data);
+                    fCount = fCount + 1;
+                    $('#tbl-pbj-body').append(`
+                        <tr>
+                            <td>
+                                `+selected_data.material+` - `+ selected_data.matdesc +`
+                                <input type="hidden" name="parts[]" id="parts`+fCount+`" class="form-control" value="`+ selected_data.material +`" readonly>
+                                <input type="hidden" name="partdesc[]" id="partdesc`+fCount+`" class="form-control" value="`+ selected_data.matdesc +`" readonly>
+                            </td>
+                            <td>
+                                <input type="text" name="quantity[]" class="form-control" style="text-align:right;" onkeypress="`+validate(event)+`" required>
+                            </td>
+                            <td>
+                                <input type="text" name="uoms[]" id="partunit`+fCount+`" value="`+ selected_data.matunit +`" class="form-control" readonly>
+                            </td>
+                            <td>
+                                <input type="text" name="figures[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="remarks[]" class="form-control">
+                                <input type="hidden" name="warehouse[]" class="form-control" value="`+ $('#find-whscode').val() +`">
+                                <input type="hidden" name="wonum[]" class="form-control">
+                                <input type="hidden" name="woitem[]" class="form-control">
+                                <input type="hidden" name="kodebudget[]" value='`+ selected_data.kodebudget +`' class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" id="btnRemove`+fCount+`">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+
+                    $('#btnRemove'+fCount).on('click', function(e){
+                        e.preventDefault();
+                        var row_index = $(this).closest("tr").index();
+                        removeItem(row_index);
+                        $(this).closest("tr").remove();
+                    });
+                }
+            });
+        }
 
         function loadMaterial(){
             $("#tbl-material-list").DataTable({
@@ -382,6 +493,7 @@
                                 <input type="hidden" name="warehouse[]" class="form-control" value="`+ $('#find-whscode').val() +`">
                                 <input type="hidden" name="wonum[]" class="form-control">
                                 <input type="hidden" name="woitem[]" class="form-control">
+                                <input type="hidden" name="kodebudget[]" value='0' class="form-control">
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger" id="btnRemove`+fCount+`">
@@ -423,6 +535,20 @@
             }else{
                 loadMaterial();
                 $('#modal-add-material').modal('show');
+            }
+        });
+
+        $('.btn-add-pbj-rab').on('click', function(){
+            // alert($('#tglpbj').val());
+            var pbjDate = $('#tglpbj').val()
+            let result = pbjDate.substring(0, 7);
+            // alert(result)
+            // if($('#find-whscode').val() === '' || $('#find-whscode').val() == null){
+            if(result === ""){
+                toastr.error("Input Tanggal PBJ");
+            }else{
+                loadRAB(result);
+                $('#modal-add-rab').modal('show');
             }
         });
 

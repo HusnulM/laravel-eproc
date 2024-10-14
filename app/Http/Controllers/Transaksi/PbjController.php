@@ -210,6 +210,44 @@ class PbjController extends Controller
         return DataTables::queryBuilder($query)->toJson();
     }
 
+    public function rabList($param){
+
+        $url     = 'https://mahakaryabangunpersada.com/rab/B807C072-05ADCCE0-C1C82376-3EC92EF1/'.$param;
+        // dd($url);
+        $execapi = mbpAPI($url, 'B807C072-05ADCCE0-C1C82376-3EC92EF1', null);
+
+        $response = json_decode($execapi, true);
+        $response = json_decode($execapi);
+        // return $response;
+        // return collect($response);
+        // dd($response->data);
+        $rabItems = array();
+
+        foreach($response->data as $key => $row){
+
+            if($row->part_number !== "" && $row->part_number !== "000"){
+                // dd($row);
+                $data = array(
+                    'id'          => $row->id,
+                    'material'    => $row->part_number,
+                    'matdesc'     => $row->item,
+                    'partnumber'  => $row->part_number,
+                    'partname'    => $row->item,
+                    'availableQty'=> $row->qty,
+                    'matunit'     => $row->satuan,
+                    'kodebudget'  => $row->kodebudget,
+                    'avg_price'   => '0',
+                );
+                array_push($rabItems, $data);
+            }
+        }
+
+        $rabItems = collect($rabItems)->sortBy('id')->values();
+
+        return Datatables::of($rabItems)->addIndexColumn()->make(true);
+        // return $response;
+    }
+
     public function list(){
         $department = DB::table('t_department')->get();
         return view('transaksi.pbj.list', ['department' => $department]);
@@ -426,7 +464,8 @@ class PbjController extends Controller
                 $remark   = $req['remarks'];
                 $wonum    = $req['wonum'];
                 $woitem   = $req['woitem'];
-                $whscode  = $req['warehouse'];
+                $whscode  = $req['whscode'];
+                $budgetcode  = $req['kodebudget'];
 
                 $insertData = array();
                 $pbjItems   = array();
@@ -448,7 +487,9 @@ class PbjController extends Controller
                         'remark'       => $remark[$i],
                         'wonum'        => $wonum[$i] ?? null,
                         'woitem'       => $woitem[$i] ?? 0,
-                        'whscode'      => $whscode[$i],
+                        // 'whscode'      => $whscode[$i],
+                        'whscode'      => $whscode,
+                        'budget_code'  => $budgetcode[$i] ?? '0',
                         'createdon'    => getLocalDatabaseDateTime(),
                         'createdby'    => Auth::user()->email ?? Auth::user()->username
                     );
@@ -612,6 +653,7 @@ class PbjController extends Controller
                 $woitem   = $req['woitem'];
                 $whscode  = $req['warehouse'];
                 $pbjitem  = $req['pbjitem'];
+                $budgetcode  = $req['kodebudget'];
 
                 $insertData = array();
                 $pbjItems   = array();
@@ -638,6 +680,7 @@ class PbjController extends Controller
                         'wonum'        => $wonum[$i] ?? null,
                         'woitem'       => $woitem[$i] ?? 0,
                         'whscode'      => $whscode[$i] ?? $req['whscode'],
+                        'budget_code'  => $budgetcode[$i] ?? '0',
                         'createdon'    => getLocalDatabaseDateTime(),
                         'createdby'    => Auth::user()->email ?? Auth::user()->username
                     );

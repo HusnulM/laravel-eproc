@@ -35,7 +35,7 @@
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label for="tglpbj">Tanggal PBJ</label>
-                                            <input type="date" name="tglpbj" class="form-control" value="{{ $pbjhdr->tgl_pbj }}" required>
+                                            <input type="date" name="tglpbj" id="tglpbj" class="form-control" value="{{ $pbjhdr->tgl_pbj }}" required>
                                             <input type="hidden" name="pbjnumber" value="{{ $pbjhdr->pbjnumber }}">
                                         </div>
                                     </div>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="currency">Warehouse</label>                                            
+                                            <label for="currency">Warehouse</label>
                                             <select name="whscode" id="find-whscode" class="form-control" required>
                                                 <option value="{{ $pbjwhs->id ?? '' }}">{{ $pbjwhs->whsname ?? '' }}</option>
                                             </select>
@@ -97,7 +97,7 @@
                                             <label for="requestor">Requestor</label>
                                             <input type="text" name="requestor" class="form-control" value="{{ Auth::user()->name }}">
                                         </div>
-                                    </div>                                    
+                                    </div>
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label for="typeModel">Type / Model</label>
@@ -115,7 +115,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>        
+                                    </div>
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label for="kodeJasa">Kode Barang / Jasa</label>
@@ -140,7 +140,7 @@
                                             <input type="text" name="km" id="km" class="form-control" value="{{ $pbjhdr->km }}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-12">
+                                    <div class="col-lg-6 col-md-12" style="display: none;">
                                         <div class="form-group">
                                             <label for="budgetcode">Budget / Cost Code</label>
                                             {{-- <input type="text" name="budgetcode" class="form-control" value="{{ $pbjhdr->budget_cost_code }}"> --}}
@@ -157,7 +157,7 @@
                                             <input type="text" name="no_rangka" id="no_rangka" class="form-control" value="{{ $pbjhdr->chassis_sn }}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-12">
+                                    <div class="col-lg-6 col-md-12" style="display: none;">
                                         <div class="form-group">
                                             <label for="periode">Periode</label>
                                             <select name="periode" class="form-control">
@@ -176,7 +176,7 @@
                                                 <option value="Desember <?= date('Y'); ?>">Desember <?= date('Y'); ?></option>
                                             </select>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-group">
                                             <label for="project">Project</label>
@@ -202,12 +202,12 @@
                                 </div>
                             </div>
                             {{-- <div class="col-lg-12">
-                                
+
                                 <div class="form-group">
                                     <label for="doctitle">PBJ Number</label>
                                     <p>{{ $pbjhdr->pbjnumber }}</p>
                                     <input type="hidden" id="pbjNumber" value="{{ $pbjhdr->pbjnumber }}">
-                                </div>  
+                                </div>
                                 <div class="form-group">
                                     <label>Checklist No:</label> {{$pbjhdr->cheklistnumber}}
                                 </div>
@@ -223,14 +223,14 @@
                         </div>
                     </div>
                 </div>
-            
+
         </div>
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
-                    
+
                     <div class="card-tools">
-                        {{-- <a href="{{ url('/printdoc/pbj/print/') }}/{{ $pbjhdr->id}}" target="_blank" class='btn btn-success btn-sm button-print'> 
+                        {{-- <a href="{{ url('/printdoc/pbj/print/') }}/{{ $pbjhdr->id}}" target="_blank" class='btn btn-success btn-sm button-print'>
                             <i class='fa fa-print'></i> Print
                         </a> --}}
                         @if($pbjhdr->pbj_status === "A")
@@ -261,7 +261,7 @@
                                             <a class="nav-link" id="custom-content-above-attachment-tab" data-toggle="pill" href="#custom-content-above-attachment" role="tab" aria-controls="custom-content-above-attachment" aria-selected="false">Attachment</a>
                                         </li>
                                     </ul>
-                                </div>                                    
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -281,9 +281,12 @@
                                                                 <th>Unit</th>
                                                                 <th>Figure</th>
                                                                 <th>Remark</th>
-                                                                <th>
+                                                                <th style="width:15%;">
                                                                     <button type="button" class="btn btn-success btn-sm btn-add-pbj-item">
                                                                         <i class="fa fa-plus"></i>
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-success btn-sm btn-add-pbj-rab">
+                                                                        <i class="fa fa-plus"></i> List RAB
                                                                     </button>
                                                                 </th>
                                                             </thead>
@@ -308,6 +311,7 @@
                                                                         <td>
                                                                             <input type="text" name="remarks[]" class="form-control" value="{{ $row->remark }}">
                                                                             <input type="hidden" name="pbjitem[]" class="form-control" value="{{ $row->pbjitem }}">
+                                                                            <input type="hidden" name="kodebudget[]" class="form-control" value="{{ $row->budget_code }}">
                                                                         </td>
                                                                         <td style="text-align: center;">
                                                                             <button type="button" class="btn btn-danger btn-sm btn-delete-item" data-pbjnumber="{{ $row->pbjnumber }}" data-pbjitem="{{ $row->pbjitem }}">
@@ -317,7 +321,7 @@
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
-                                                        </table>                                
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
@@ -352,10 +356,10 @@
                                                                         Open
                                                                     </td>
                                                                     @endif
-                                                                    
+
                                                                     <td>
                                                                         @if($row->approval_date != null)
-                                                                            <i class="fa fa-clock"></i> 
+                                                                            <i class="fa fa-clock"></i>
                                                                             ({{ formatDateTime($row->approval_date) }})
                                                                         @endif
                                                                     </td>
@@ -363,10 +367,10 @@
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>
-                                                        </table>                                                    
+                                                        </table>
                                                     </div>
                                                 </div>
-                                            </div>   
+                                            </div>
 
                                             <div class="tab-pane fade" id="custom-content-above-attachment" role="tabpanel" aria-labelledby="custom-content-above-attachment-tab">
                                                 <div class="row">
@@ -396,21 +400,21 @@
                                                                 </tr>
                                                             @endforeach
                                                             </tbody>
-                                                        </table>                           
+                                                        </table>
                                                     </div>
                                                 </div>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            
+
                         </div>
                     </div>
                 </div>
             </div>
-                
+
         </div>
     </div>
 </form>
@@ -443,8 +447,8 @@
                             <th></th>
                         </thead>
                         <tbody></tbody>
-                    </table>  
-                </div> 
+                    </table>
+                </div>
             </div>
         </div>
         <div class="modal-footer justify-content-between">
@@ -468,7 +472,7 @@
                 <div class="position-relative row form-group">
                     <div class="col-lg-12" id="fileViewer">
                         <!-- <div id="example1"></div> -->
-                        
+
                     </div>
                 </div>
             </div>
@@ -481,7 +485,41 @@
         </div>
         </form>
     </div>
-</div>   
+</div>
+
+<div class="modal fade" id="modal-add-rab">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Pilih Item RAB</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="tbl-rab-list" class="table table-bordered table-hover table-striped table-sm" style="width:100%;">
+                        <thead>
+                            <th>No</th>
+                            <th>Material</th>
+                            <th>Description</th>
+                            <th>Available Quantity</th>
+                            <th>Unit</th>
+                            <th>Kode Budget</th>
+                            <th></th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
 @endsection
 
 @section('additional-js')
@@ -491,27 +529,27 @@
 <!-- <script src="https://cdn.scaleflex.it/plugins/filerobot-image-editor/3/filerobot-image-editor.min.js"></script> -->
 
 <script type="text/javascript">
-    function previewFile(files){         
+    function previewFile(files){
         // alert(base_url)
         var pathfile = base_url+'/'+files;
         if(files !== ""){
             $('#fileViewer').html('');
             $('#fileViewer').append(`
                 <embed src="`+ pathfile +`" frameborder="0" width="100%" height="500px">
-            
+
             `);
 
             var fileUri = pathfile;
             fileUri = fileUri.replace("#toolbar=0", "?force=true");
-            
-            document.getElementById("btnDownloadFile").href=fileUri; 
+
+            document.getElementById("btnDownloadFile").href=fileUri;
             $('#modalPreviewFile').modal('show');
         } else{
             swal("File Not Found", "", "warning");
         }
     }
 
-    $(document).ready(function () { 
+    $(document).ready(function () {
         // $('#tbl-pbj').DataTable();
         let _token   = $('meta[name="csrf-token"]').attr('content');
 
@@ -545,9 +583,9 @@
                             toastr.success(response.message)
                         }else if(_action === "R"){
                             toastr.success(response.message)
-                        }                        
+                        }
 
-                        setTimeout(function(){ 
+                        setTimeout(function(){
                             window.location.href = base_url+'/approve/pbj';
                         }, 2000);
                     }
@@ -556,12 +594,22 @@
                     console.log(error);
                     toastr.error(error)
 
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         location.reload();
                     }, 2000);
                 }
             });
         }
+
+        $('.btn-add-pbj-rab').on('click', function(){
+            // alert($('#find-whscode').val())
+            if($('#find-whscode').val() === '' || $('#find-whscode').val() == null){
+                toastr.error("Pilih warehouse");
+            }else{
+                loadRAB();
+                $('#modal-add-rab').modal('show');
+            }
+        });
 
         var count = 0;
 
@@ -569,6 +617,89 @@
         let selected_items = [];
         var fCount = 0;
 
+        function loadRAB(){
+            $("#tbl-rab-list").DataTable({
+                serverSide: true,
+                ajax: {
+                    url: base_url+'/transaction/pbj/getrablist/2024-10',
+                    data: function (data) {
+                        data.params = {
+                            sac: "sac"
+                        }
+                    }
+                },
+                buttons: false,
+                columns: [
+                    { "data": null,"sortable": false, "searchable": false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {data: "material", className: 'uid'},
+                    {data: "matdesc", className: 'fname'},
+                    // {data: "mattypedesc", className: 'fname'},
+                    {data: "availableQty", "className": "text-right"},
+                    {data: "matunit", className: 'fname'},
+                    {data: "kodebudget", className: 'fname'},
+                    {"defaultContent":
+                        "<button type='button' class='btn btn-primary btn-sm button-add-rab'> <i class='fa fa-plus'></i> Add</button>"
+                    }
+                ],
+                "bDestroy": true,
+            });
+
+            $("#tbl-rab-list tbody").on('click', '.button-add-rab', function(){
+                var menuTable = $('#tbl-rab-list').DataTable();
+                selected_data = [];
+                selected_data = menuTable.row($(this).closest('tr')).data();
+
+                if(checkSelectedMaterial(selected_data.material)){
+                    console.log(selected_items);
+                }else{
+                    console.log(selected_data);
+                    selected_items.push(selected_data);
+                    fCount = fCount + 1;
+                    $('#tbl-pbj-body').append(`
+                        <tr>
+                            <td>
+                                `+selected_data.material+` - `+ selected_data.matdesc +`
+                                <input type="hidden" name="parts[]" id="parts`+fCount+`" class="form-control" value="`+ selected_data.material +`" readonly>
+                                <input type="hidden" name="partdesc[]" id="partdesc`+fCount+`" class="form-control" value="`+ selected_data.matdesc +`" readonly>
+                            </td>
+                            <td>
+                                <input type="text" name="quantity[]" class="form-control" style="text-align:right;" onkeypress="`+validate(event)+`" required>
+                            </td>
+                            <td>
+                                <input type="text" name="uoms[]" id="partunit`+fCount+`" value="`+ selected_data.matunit +`" class="form-control" readonly>
+                            </td>
+                            <td>
+                                <input type="text" name="figures[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="remarks[]" class="form-control">
+                                <input type="hidden" name="warehouse[]" class="form-control" value="`+ $('#find-whscode').val() +`">
+                                <input type="hidden" name="wonum[]" class="form-control">
+                                <input type="hidden" name="woitem[]" class="form-control">
+                                <input type="hidden" name="pbjitem[]" class="form-control">
+                                <input type="hidden" name="kodebudget[]" value='`+ selected_data.kodebudget +`' class="form-control">
+                            </td>
+                            <td style="text-align:center;">
+                                <button type="button" class="btn btn-sm btn-danger" id="btnRemove`+fCount+`">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+
+                    $('#btnRemove'+fCount).on('click', function(e){
+                        e.preventDefault();
+                        var row_index = $(this).closest("tr").index();
+                        removeItem(row_index);
+                        $(this).closest("tr").remove();
+                    });
+                }
+            });
+        }
 
         function loadMaterial(){
             $("#tbl-material-list").DataTable({
@@ -586,14 +717,14 @@
                     { "data": null,"sortable": false, "searchable": false,
                         render: function (data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
-                        }  
+                        }
                     },
                     {data: "material", className: 'uid'},
                     {data: "matdesc", className: 'fname'},
                     // {data: "partnumber", className: 'fname'},
                     {data: "availableQty", "className": "text-right"},
                     {data: "matunit", className: 'fname'},
-                    {"defaultContent": 
+                    {"defaultContent":
                         "<button type='button' class='btn btn-primary btn-sm button-add-material'> <i class='fa fa-plus'></i> Add</button>"
                     }
                 ],
@@ -634,15 +765,16 @@
                                 <input type="hidden" name="wonum[]" class="form-control">
                                 <input type="hidden" name="woitem[]" class="form-control">
                                 <input type="hidden" name="pbjitem[]" class="form-control">
+                                <input type="hidden" name="kodebudget[]" value='0' class="form-control">
                             </td>
-                            <td>
-                                <button type="button" class="btn btn-danger" id="btnRemove`+fCount+`">
+                            <td style="text-align:center;">
+                                <button type="button" class="btn btn-sm btn-danger" id="btnRemove`+fCount+`">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
                     `);
-    
+
                     $('#btnRemove'+fCount).on('click', function(e){
                         e.preventDefault();
                         var row_index = $(this).closest("tr").index();
@@ -660,13 +792,54 @@
                 }else{
                     return false;
                 }
-            }); 
+            });
         }
 
         function removeItem(index){
             selected_items.splice(index, 1);
         }
-            
+
+        function validate(evt) {
+            var theEvent = evt || window.event;
+
+            // Handle paste
+            if (theEvent.type === 'paste') {
+                key = event.clipboardData.getData('text/plain');
+            } else {
+            // Handle key press
+                var key = theEvent.keyCode || theEvent.which;
+                key = String.fromCharCode(key);
+            }
+            var regex = /[0-9]|\./;
+            if( !regex.test(key) ) {
+                theEvent.returnValue = false;
+                if(theEvent.preventDefault) theEvent.preventDefault();
+            }
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        }
+
+        $('.inputNumber').on('change', function(){
+            this.value = formatRupiah(this.value,'');
+        });
+
+        function formatRupiah(angka, prefix){
+            var number_string = angka.toString().replace(/[^.\d]/g, '').toString(),
+            split   		  = number_string.split('.'),
+            sisa     		  = split[0].length % 3,
+            rupiah     		  = split[0].substr(0, sisa),
+            ribuan     		  = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if(ribuan){
+                separator = sisa ? ',' : '';
+                rupiah += separator + ribuan.join(',');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + '.' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? '' + rupiah : '');
+        }
 
         $('.btn-add-pbj-item').on('click', function(){
             // alert($('#find-whscode').val())
@@ -695,13 +868,13 @@
                     // showBasicMessage();
                 },
                 success:function(response){
-                    
+
                 },
                 error: function(error) {
                     console.log(error);
                     toastr.error(error)
 
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         location.reload();
                     }, 2000);
                 }
@@ -710,20 +883,20 @@
                 if(response.msgtype === "200"){
 
                     toastr.success(response.message)
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                             location.reload();
                         }, 2000);
                 }else{
                     toastr.error(response.message);
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                             location.reload();
                         }, 2000);
-                }                
+                }
                 // $(this).closest("tr").remove();
             });
         });
 
-        $('#find-whscode').select2({ 
+        $('#find-whscode').select2({
             placeholder: 'Ketik Nama Gudang',
             width: '100%',
             minimumInputLength: 0,
@@ -760,9 +933,9 @@
                 },
                 cache: true
             }
-        }); 
+        });
 
-        $('#find-project').select2({ 
+        $('#find-project').select2({
             placeholder: 'Nama Project',
             width: '100%',
             minimumInputLength: 0,

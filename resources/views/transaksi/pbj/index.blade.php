@@ -173,6 +173,9 @@
                                                     <button type="button" class="btn btn-success btn-sm btn-add-pbj-item">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
+                                                    <button type="button" class="btn btn-success btn-sm btn-add-pbj-rab">
+                                                        <i class="fa fa-plus">List RAB</i>
+                                                    </button>
                                                 </th>
                                             </thead>
                                             <tbody id="tbl-pbj-body">
