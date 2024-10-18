@@ -23,9 +23,14 @@ use App\Exports\TransferExport;
 use App\Exports\GrpoExport;
 use App\Exports\StockHistoryExport;
 use App\Exports\StockHistoryDetailExport;
+use App\Exports\MaterialExport;
 
 class ExportDataController extends Controller
 {
+    public function exportMaterial(Request $req){
+        return Excel::download(new MaterialExport($req), 'Item-List.xlsx');
+    }
+
     public function exportPBJ(Request $req){
         return Excel::download(new PbjExport($req), 'Laporan-PBJ.xlsx');
     }
