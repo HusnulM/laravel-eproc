@@ -5,7 +5,7 @@
 @section('additional-css')
 @endsection
 
-@section('content')        
+@section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -26,13 +26,21 @@
                         <div class="card-header">
                             <h3 class="card-title"></h3>
                             <div class="card-tools">
-                                <a href="{{ url('/master/item/create') }}" class="btn btn-success btn-sm">
-                                    <i class="fas fa-plus"></i> Create Item Master
-                                </a>
 
-                                <a href="{{ url('/master/item/upload') }}" class="btn btn-success btn-sm">
-                                    <i class="fas fa-upload"></i> Upload Item Master
-                                </a>
+                                <form action="{{ url('master/item/exportitemlist') }}" method="post">
+                                    @csrf
+                                    <a href="{{ url('/master/item/create') }}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-plus"></i> Create Item Master
+                                    </a>
+
+                                    <a href="{{ url('/master/item/upload') }}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-upload"></i> Upload Item Master
+                                    </a>
+
+                                    <button type="submit" class="btn btn-sm btn-success btn-export pull-right">
+                                        <i class="fa fa-download"></i> Export Data
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body">
@@ -47,7 +55,7 @@
                                         <th style="text-align:center;"></th>
                                     </thead>
                                     <tbody>
-            
+
                                     </tbody>
                                 </table>
                             </div>
@@ -73,7 +81,7 @@
                                         <th style="text-align:center; width: 50px;"></th>
                                     </thead>
                                     <tbody>
-            
+
                                     </tbody>
                                 </table>
                             </div>
@@ -100,7 +108,7 @@
                                         <th style="text-align:center;"></th>
                                     </thead>
                                     <tbody>
-            
+
                                     </tbody>
                                 </table>
                             </div>
@@ -108,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -139,10 +147,10 @@
                                 </th>
                             </thead>
                             <tbody id="tbl-item-category-body">
-    
+
                             </tbody>
-                        </table>  
-                    </div> 
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -171,7 +179,7 @@
                         <label for="item-cate">Item Category</label>
                         <input type="text" class="form-control" name="itemcate" id="edit-item-cate">
                         <input type="hidden" class="form-control" name="itemcatid" id="edit-item-id">
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -208,10 +216,10 @@
                                 </th>
                             </thead>
                             <tbody id="tbl-uom-body">
-    
+
                             </tbody>
-                        </table>  
-                    </div> 
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -240,12 +248,12 @@
                         <label for="">Uom Code</label>
                         <input type="text" class="form-control" name="uom-code" id="uom-code">
                         <input type="hidden" class="form-control" name="uom-id" id="uom-id">
-                    </div> 
+                    </div>
 
                     <div class="col-lg-12">
                         <label for="">Uom Code</label>
                         <input type="text" class="form-control" name="uom-desc" id="uom-desc">
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -280,20 +288,20 @@
                 { "data": null,"sortable": false, "searchable": false, "defaultContent": "",
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
-                    }  
+                    }
                 },
                 {data: "material", className: 'uid'},
                 {data: "matdesc", className: 'fname'},
                 {data: "mattypedesc", className: 'uname'},
                 {data: "matunit", className: 'uname'},
-                {"defaultContent": 
-                    `<button class='btn btn-danger btn-sm button-delete'> <i class='fa fa-trash'></i> DELETE</button> 
+                {"defaultContent":
+                    `<button class='btn btn-danger btn-sm button-delete'> <i class='fa fa-trash'></i> DELETE</button>
                     <button class='btn btn-primary btn-sm button-edit'> <i class='fa fa-edit'></i> EDIT</button>
                     `,
                     "className": "text-center",
                     "width": "20%"
                 }
-            ]  
+            ]
         }).columns.adjust();
 
         $('#tbl-item-master tbody').on( 'click', '.button-delete', function () {
@@ -330,18 +338,18 @@
                 // { "data": null,"sortable": false, "searchable": false,
                 //     render: function (data, type, row, meta) {
                 //         return meta.row + meta.settings._iDisplayStart + 1;
-                //     }  
+                //     }
                 // },
                 {data: "id"},
                 {data: "mattypedesc"},
-                {"defaultContent": 
-                    `<button class='btn btn-danger btn-sm button-itmcat-delete'> <i class='fa fa-trash'></i> DELETE</button> 
+                {"defaultContent":
+                    `<button class='btn btn-danger btn-sm button-itmcat-delete'> <i class='fa fa-trash'></i> DELETE</button>
                     <button class='btn btn-primary btn-sm button-itmcat-edit'> <i class='fa fa-edit'></i> EDIT</button>
                     `,
                     "className": "text-center",
                     "width": "50px"
                 }
-            ]  
+            ]
         }).columns.adjust();
 
         $('#tbl-item-type tbody').on( 'click', '.button-itmcat-delete', function () {
@@ -379,20 +387,20 @@
                 { "data": null,"sortable": false, "searchable": false,
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
-                    }  
+                    }
                 },
                 {data: "uom"},
                 {data: "uomdesc"},
-                {"defaultContent": 
-                    `<button class='btn btn-danger btn-sm button-uom-delete'> <i class='fa fa-trash'></i> DELETE</button> 
+                {"defaultContent":
+                    `<button class='btn btn-danger btn-sm button-uom-delete'> <i class='fa fa-trash'></i> DELETE</button>
                     <button class='btn btn-primary btn-sm button-uom-edit'> <i class='fa fa-edit'></i> EDIT</button>
                     `,
                     "className": "text-center",
                     "width": "50px"
                 }
-            ]  
+            ]
         }).columns.adjust();
-        
+
         $('#tbl-item-unit tbody').on( 'click', '.button-uom-delete', function () {
             var table = $('#tbl-item-unit').DataTable();
             selected_data = [];
