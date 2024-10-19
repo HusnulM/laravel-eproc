@@ -839,4 +839,10 @@ class PbjController extends Controller
             // dd($e->getMessage());
         }
     }
+
+    public function resetRealizedPBJ()
+    {
+        $exec = resetPBJNotRealized();
+        return $exec;
+    }
 }

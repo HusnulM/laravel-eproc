@@ -4,6 +4,27 @@ use Illuminate\Support\Facades\DB;
 
 $totalBaris = 0;
 
+function resetPBJNotRealized(){
+    DB::beginTransaction();
+    try{
+        DB::select('call spPBJNotRealized()');
+        DB::commit();
+
+        $result = array(
+            'msgtype' => '200',
+            'message' => 'Reset Realized PBJ Success'
+        );
+        return $result;
+    }catch(\Exception $e){
+        DB::rollBack();
+        $result = array(
+            'msgtype' => '400',
+            'message' => $e->getMessage()
+        );
+        return $result;
+    }
+}
+
 function setExcelRows($row){
     $totalBaris = $row;
     return $totalBaris;
